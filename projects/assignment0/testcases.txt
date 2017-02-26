@@ -1,0 +1,105 @@
+==============
+Test Case 1
+==============
+INPUT: APPLE234234BANANA234[2343apple42]3[423banana
+
+====================
+Test Case 1 Output
+====================
+APPLE 
+BANANA
+apple
+banana
+
+********************************************************************
+==============
+Test Case 2
+==============
+INPUT: aand,aAnd,Aand,AAnd
+
+===================
+Test Case Output 2
+===================
+AAnd
+Aand
+aAnd
+aand
+
+*******************************************************************
+==============
+Test Case 3
+==============
+INPUT: THIS234230234]234this23[]42]34[tHiS3[423]]4[324[thIS34[]43thiS
+
+===================
+Test Case Output 3
+===================
+THIS
+tHiS
+thIS
+thiS
+this
+
+*******************************************************************
+==============
+Test Case 4
+==============
+INPUT: Thisisalongstring1Iamanotherlongstring
+
+===================
+Test Case Output 4
+===================
+Iamanotherlongstring
+Thisisalongstring
+
+*******************************************************************
+==============
+Test Case 5
+==============
+INPUT: toast123apple123banana123APPLE123ApLLe123watermellon82983839[][
+
+=================
+TestCase 5 Ouput
+=================
+APPLE
+ApLLe
+apple
+banana
+toast
+watermellon
+
+********************************************************************
+=============
+Test Case 6
+=============
+INPUT: Wee1WEe1WeE1wEE1wEe1wEe1wEe1wEe
+
+===================
+Test Case 6 Output
+===================
+WEe
+WeE
+Wee
+wEE
+wEe
+wEe
+wEe
+wEe
+
+*********************************************************************
+=============
+Test Case 7
+=============
+INPUT: Hello234234Good34234Bye890809808Idk8098908Why7908you2394082390409234923490823saygoOODbye23948ISAYhellO
+
+===================
+Test Case 7 Output
+===================
+Bye
+Goood
+Hello
+ISAYhello
+Idk
+Why
+saygoOODbye
+you
