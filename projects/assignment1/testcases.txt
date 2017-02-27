@@ -1,0 +1,6 @@
+Douglas Rudolph
+Brandon Yu
+
+Test Case E: I included this test because every time it runs, it creates three nodes in memory. It then deletes the middle node, followed by the first node, and then the last node. Doing this forces the heap to merge the second node with the third node when calling free, followed up with merging node with the first. Because I merge the nodes together recursivley, I see a major slow down in my code in this test case in comparison to every other test case.
+
+Test Case F: For Test Case F, I create two nodes, and then free the nodes in the reverse order I create them. Doing this causes the reursision to kick in when I free the nodes. I included this test because unlike Test Case E, it strictly tracks how long the recursion process takes within a free method call. 

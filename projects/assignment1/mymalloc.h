@@ -1,3 +1,8 @@
+/*
+ * Authors: Douglas Rudolph, Brandon Yu
+ * File: mymalloc.h
+ * Course: Systems Programming
+ */
 #include <stdio.h>
 
 //project function definitions

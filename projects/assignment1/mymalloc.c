@@ -1,3 +1,8 @@
+/*
+ * Authors: Douglas Rudolph, Brandon Yu
+ * File: mymalloc.c
+ * Course: Systems Programming
+ */
 #include "mymalloc.h"
 
 /*
@@ -204,10 +209,10 @@ void print_heap_status(){
 	int i;
 	char* itr = &heap[0];
 	for(i=0; i < mem_node_count; i++){
-		printf("Data Entry:\t%d\n", i);
-		printf("Mem Address:\t%p\n", itr);
-		printf("Dirty Bit:\t%d\n", ((MemNode*)(itr))->dirty_bit); 
-		printf("Entry Size:\t%d\n\n", ((MemNode*)(itr))->mem_size);
+		//printf("Data Entry:\t%d\n", i);
+		//printf("Mem Address:\t%p\n", itr);
+		//printf("Dirty Bit:\t%d\n", ((MemNode*)(itr))->dirty_bit); 
+		//printf("Entry Size:\t%d\n\n", ((MemNode*)(itr))->mem_size);
 		
 		size_t displacement = ((MemNode*)(itr))->mem_size + sizeof(MemNode*) +1;
 
