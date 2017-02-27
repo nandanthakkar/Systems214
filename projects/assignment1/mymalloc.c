@@ -32,44 +32,33 @@ void* mymalloc(size_t request_size, char* string, size_t line){
 	return (void*)(open_position);
 }
 
-/*
- * Overwrites the memory addres
- */
 void myfree(void* mem_addr, char* string, size_t line){
 	
 	//ptr that will be used for traversing through the heap
 	char* itr = &heap[0];
-	
-	//calculate displacement between current data and next data
-	size_t displacement = ((MemNode*)(itr))->mem_size + sizeof(MemNode*) + 1;
-	
 	
 	int i;
 	for(i=0; i<mem_node_count; i++){	
 	
 		//checks to see if the memory address of the data is the same as the on in the heap
 		//if the data we are trying to delete is infact a &char that we can write data too, delete it
-			
-		printf("size: %d\n", ((MemNode*)(itr))->mem_size);
-		printf("address %p\n", itr);	
-		if(mem_addr == (itr+sizeof(MemNode*)+1) && ((MemNode*)(itr))->dirty_bit==true){	
+		if(mem_addr == (itr+sizeof(MemNode*)+1) ){
 			//sets the dirty bit of the current node
 			((MemNode*)(itr))->dirty_bit = false;
 			purge_heap(itr,itr,0);	
-			return;
+			break;
 		}
 		
-		//update itr to the next position in the heap	
-		itr += displacement;	
-
+		//update itr to the next position in the heap
+		size_t displacement = ((MemNode*)(itr))->mem_size + sizeof(MemNode*) + 1;
+		itr += displacement;
 	}
-
-	printf("ERROR: NO SUCH REFERENCE EXISTS - memory location requested was not recognized\n");
 }
 
 /*
  * Defragment memory when ever we try to free a node
  */
+
 void purge_heap(char* dest, char* mem_addr, int nodes_purged){
 	
 	//calculate the displacement
@@ -103,7 +92,7 @@ void purge_heap(char* dest, char* mem_addr, int nodes_purged){
 		//subtract away a memory node
 		mem_node_count-=1;
 		
-		printf("mem_node_count: %d\n", mem_node_count);
+		//printf("mem_node_count: %d\n", mem_node_count);
 		//recurse through until all adjacent nodes merge
 		purge_heap(dest, dest+displacement, nodes_purged+1);
 	}
@@ -141,8 +130,7 @@ char* seek_heap(char* starting_block, size_t request_size){
 	}
 	
 	//otherwise return null
-	printf("ERROR: HEAP OVERFLOW - insufficient amount of room in heap.\n");
-	return 0;
+	return NULL;
 }
 
 /*
@@ -201,7 +189,7 @@ void init_heap(){
 
 	//update the global heap counter & MemNode counter
 	memory_count += sizeof(data);
-	mem_node_count += 1;
+	mem_node_count = 1;
 }
 
 /*
@@ -212,8 +200,7 @@ void init_heap(){
  */
 void print_heap_status(){
 
-	printf("MEMEORY ALLOCATED:\t%d\nMEMORY LEFT:\t\t%d\n\n", memory_count, HEAP_SIZE-memory_count);
-	
+	//printf("MEMEORY ALLOCATED:\t%d\nMEMORY LEFT:\t\t%d\n\n", memory_count, HEAP_SIZE-memory_count);
 	int i;
 	char* itr = &heap[0];
 	for(i=0; i < mem_node_count; i++){
@@ -222,7 +209,8 @@ void print_heap_status(){
 		printf("Dirty Bit:\t%d\n", ((MemNode*)(itr))->dirty_bit); 
 		printf("Entry Size:\t%d\n\n", ((MemNode*)(itr))->mem_size);
 		
-		size_t displacement = ((MemNode*)(itr))->mem_size + sizeof(MemNode*) + 1;
+		size_t displacement = ((MemNode*)(itr))->mem_size + sizeof(MemNode*) +1;
+
 		itr += displacement;	
 	} 
 }
