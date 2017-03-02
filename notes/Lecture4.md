@@ -58,12 +58,17 @@ If you return data that isn't `malloc`ed data, the data you are trying to get fr
 
 ```C
 int* func(int b){
+	//create the variable within the stackframe
 	int c = 100;
+	//create a pointer to a variable within the stackframe
 	int *p = &c;
-
+	
+	//return a pointer to a variable within the stackframe. 
+	//(variable will be deleted once the program leaves THIS stackframe)
 	return p;
 }
 
+//Won't be looking at anything because the variable returned will have been deleted from call stack. 
 int* q = func(5);
 ```
 
