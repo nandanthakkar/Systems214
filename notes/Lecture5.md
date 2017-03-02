@@ -94,17 +94,35 @@ void foo(){
 
 --- 
 
-#### const
+#### The Mess that is C-Lang. Constants
 
 ```C
-int const * p;
 
+/* 
+ * This line can be read as: "int pointer that has a constant reference"
+ * An easy way to think of it is: int (const*) p
+ * So it's pointer to an integer constant
+ */
+int const* p; 
+
+/*
+ * This line can be read as "constant integer pointer
+ * An easy way to think of it is: const (int*) p;
+ */
 const int* p
+
+/*
+ * 
+ */
 int* const p
+
+/*
+ *
+ */
 const int* const p
 
 const int a = 5;
-int* p = &5;g
+int* p = &5;
 ```
 
 ```C
@@ -113,7 +131,7 @@ int strlen(const char* str){
 	int i=count=0;
 	for(i = 0; str[i] != NULL; i++)
 	    count++;
-	
+
 	return count;
 }
 
