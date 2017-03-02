@@ -51,9 +51,6 @@ int i;
 //do this
 int i = 0;
 ```
-<b> Find mssing notes for here </b>
-The heap won't exist beyond the lifetime of said process. 
-
 
 #### 
 When returning pointers, you have to be careful to not pass around pointers that aren't pointing to `malloc`ed data. 
