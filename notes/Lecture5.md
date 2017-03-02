@@ -110,9 +110,9 @@ int* p = &5;g
 ```C
 //The char* that strlen recieves is now a constant and can manipulate the data
 int strlen(const char* str){
-	int count=0;
+	int i=count=0;
 	for(i = 0; str[i] != NULL; i++)
-		count++;
+	    count++;
 	
 	return count;
 }
