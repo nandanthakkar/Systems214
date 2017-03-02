@@ -74,7 +74,13 @@ int* func(int b){
 	int c = b+1;
 	int* p = (int*) malloc(size(int));
 	
-	//set the data of p equal to the data within c.
+	//set the data of p equal to the data within c, and store outside the stackframe.
 	*p = c;
+	
+	//return the malloced info
+	return p;
 }
+
+//get reference to malloced data
+int *ptr = func(100);
 ```
