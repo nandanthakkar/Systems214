@@ -29,7 +29,8 @@ char* create_str(char* str){
 
 	/* similar to the following line
 	 * char* str = (char*)malloc(strlen(str)*sizeof(char));
-	 * main difference is that calloc makes sure all the defualt information is null while malloc won't
+	 * main difference is that calloc makes sure all the defualt information is null
+	 * malloc will just grab data and not clear the memory you are allocating
 	 */
 	
 	//create a string in memory, set the 
