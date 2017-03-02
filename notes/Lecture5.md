@@ -2,7 +2,7 @@
 
 #### malloc, calloc, realloc
 
-###### Is sizeof(struct thing) >= sizeof(char)+sizeof(int)?
+Is `sizeof(struct thing)` ≥ `sizeof(char)+sizeof(int)`?
 
 <b>Prompt Code</b>
 ```C
