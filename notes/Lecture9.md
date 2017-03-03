@@ -10,15 +10,11 @@ Execute
 
 #### Changing File Permissions & Owners
 
-##### chown
-`chown`: Change Owner
-
-##### chmod
-`chmod`: Change mode
-
-`chmod a+r <filename>` - For all user, add the read permission.
-`chmod a-r <filename>` - Remove read permission for everybody, including yourself.
-`chmod u+r <filename>` - Giving back the ability for me to read a file.
+- `chown`: Change Owner
+- `chmod`: Change mode
+- `chmod a+r <filename>` - For all user, add the read permission.
+- `chmod a-r <filename>` - Remove read permission for everybody, including yourself.
+- `chmod u+r <filename>` - Giving back the ability for me to read a file.
 
 different levels of organization a file can undergo:
 a: all
