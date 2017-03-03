@@ -41,21 +41,22 @@ if(status == 0){
 ##### General Review
 `fork()`: Called once, returns twice (once to parent once to child
 `exec()`: Called, but doesn't return in normal operation
+
 ---
 
 #### Killing Processes
 
-##### When Should the OS Clean up a Proess?
-<b> FILL IN BUBBLE,</b>
+##### When Should the OS Clean up a Process?
+<b> TODO: Find solution </b>
 
-##### <i>wait</i> Command & Killing a process
+##### `wait` Command & Killing a process
 When a parent process calls `wait` on a child process, only then can a child process be killed when a child process is done. If the OS trys to kill a child process and it is still running, the OS will `wait` for in, hence `wait`. tells the OS to wait for a process 
 
 <b>Zombie Process</b>: When a chid process that has no more exectuion to do, has returned, but parent has not called wait() on it yet. 
 
 <b>Orphan Process</b>: Child process whose parent has died without calling wait. (Yes, you can have <i>zombie orphans</i>
 
-<b>Init (Scheduler/Process 0)<b>: A process that knows how to schedule processes to run. When this process runs, it is invoked from some easily acesible place on the harddrive which then runs the OS and schedule the rest of the processes. 
+<b>Init (Scheduler/Process 0)</b>: A process that knows how to schedule processes to run. When this process runs, it is invoked from some easily acesible place on the harddrive which then runs the OS and schedule the rest of the processes. 
 
 `Init` also has the ability to adopt and orphan processes and `wait`s on them
 
