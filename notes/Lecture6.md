@@ -48,7 +48,7 @@ Node* create(char* string, int num){
 When freeing data inside of a struct, <b>ensure the data of the variables inside the struct are freed</b> before freeing the reference to the struct itself.
 
 ```C
-//Node used in example
+//Example Node Struct
 typedef struct _Node{
 	char* str;
 	int * num;
