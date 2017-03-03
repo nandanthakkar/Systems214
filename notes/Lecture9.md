@@ -44,6 +44,7 @@ reads the permissions from left to right. It first starts off by reading if the 
 - `ps aux | less` runs `ps aux`, but shows less of the output. Similarly, you can use `ps aux | more` 
 - `top` shows everything that is running on the machine. It can show you info such as: how many users are running, the CPU ussage, etc.
 - `top 1` shows the percentage of CPU usage on the machine. Gives you a sense of how many CPUs you are using as well as the proces id.
+
 ---
 
 `ln` a link. It a link is a poi
