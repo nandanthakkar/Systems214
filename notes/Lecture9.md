@@ -29,6 +29,11 @@ third tuple: Specifies the owner
 
 reads the permissions from left to right. It first starts off by reading if the user running either `chmod` or `chown` is a user. If so, the it allows the command to run. If you are not user, it will check what group you are in and see if you have permissions to run it. Finally, if you are not in an applicaable group, it then finally checks to see if you are the owner. This, unix machines will compare see if you can edit the permission so of file from the least general permissions to the most specific.
 
+<b>Example Permissions:</b>
+- `rwx------`: User can read, write and execute
+- `rw---x---`: User can read and write, and a group can execute
+- `--x------`: The user can only execute.
+
 ---
 
 #### Killing a Process
