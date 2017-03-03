@@ -51,14 +51,11 @@ if(status == 0){
 ##### <i>wait</i> Command & Killing a process
 When a parent process calls `wait` on a child process, only then can a child process be killed when a child process is done. If the OS trys to kill a child process and it is still running, the OS will `wait` for in, hence `wait`. tells the OS to wait for a process 
 
-##### Zombie Process
-When a chid process that has no more exectuion to do, has returned, but parent has not called wait() on it yet. 
+<b>Zombie Process</b>: When a chid process that has no more exectuion to do, has returned, but parent has not called wait() on it yet. 
 
-##### Orphan Process
-Child process whose parent has died without calling wait. (Yes, you can have <i>zombie orphans</i>
+<b>Orphan Process</b>: Child process whose parent has died without calling wait. (Yes, you can have <i>zombie orphans</i>
 
-##### Init (Scheduler) - Process 0
-A process that knows how to schedule processes to run. When this process runs, it is invoked from some easily acesible place on the harddrive which then runs the OS and schedule the rest of the processes. 
+<b>Init (Scheduler/Process 0)<b>: A process that knows how to schedule processes to run. When this process runs, it is invoked from some easily acesible place on the harddrive which then runs the OS and schedule the rest of the processes. 
 
 `Init` also has the ability to adopt and orphan processes and `wait`s on them
 
