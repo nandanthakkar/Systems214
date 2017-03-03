@@ -33,7 +33,7 @@ reads the permissions from left to right. It first starts off by reading if the 
 
 #### Killing a Process
 
-- `^c` is the eaiest way to kill a command, but what if the command is not in the foreground. `^z` will make a command go from the foreground to the background. 
+- `^c` (ctrl + c) is the eaiest way to kill a command, but what if the command is not in the foreground. `^z` (ctrl + z) will make a command go from the foreground to the background. 
 - The `kill` command will try to run and turn off a process. Some processes run at such a high level that you can't just kill them without sudo and or a more powerful kill command. `kill -9 <pid>` will force shut down a command. `kill - KILL` is another way to force kill a process. 
 - `ps` will show a current snap shot of the current programs that you are running
 - `ps aux` shows all the commands all users are running.
