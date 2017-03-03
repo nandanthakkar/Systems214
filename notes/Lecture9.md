@@ -42,6 +42,7 @@ reads the permissions from left to right. It first starts off by reading if the 
 - `top 1` shows the percentage of CPU usage on the machine. Gives you a sense of how many CPUs you are using as well as the proces id.
 
 ---
+#### Linking
 
-`ln` a link. It a link is a poi
+`ln`: Create  a  link  to  the  specified TARGET with optional LINK_NAME. If LINK_NAME is omitted, a link with the same basename as  the  TARGET  is created in the current directory.
 
