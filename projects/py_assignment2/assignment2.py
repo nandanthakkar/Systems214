@@ -1,57 +1,87 @@
-#!/doug/bin/python
 import os
 import re
 
-#Class to store filename and word count (would be struct in C-Language)
-class HashData:
-    def __init__(self, filename, wordcount):
-        self.filename = filename
-        self.wordcount = wordcount
-    def print_hash(self):
-        real_filename = re.split("[/]|[.]", self.filename)
-        print(real_filename[len(real_filename)-2], self.wordcount)
+'''
+HASHTABLE: 
+    Token will be the key, the value stored will be 
+    the file as well as the token count for each file.
 
+GENERAL EXAMPLE: 
+    Token -> [(file1, token_count), (file2, token_count)... (fileN, token_count)]
 
-#words to search that were given by Fransisco's example
-search_words = ['a', 'baa', 'boo', 'cat', 'dog', 'name']
+CONCRETE EXAMPLE: (Example from the Assignment2.pdf)
+    "name" -> [("boo", 2), ("baa", 1)]
+'''
+tok_table = {}
 
-indexer_hash = {}
+#walks through a folder and reads each textfile
+def stroll_file_system(rootdir):
+    for root, dirs, files in os.walk(rootdir):
+        
+        #for files in directory
+        for file in files:
 
-#function to recurse through a file system and find all text files
-def find_files():
-    #rootdir is the directory the program starts looping through to look for text files
-    rootdir = os.getcwd()+"/example_data"
-
-    #iterate over all sub directories
-    for subdir, dirs, files in os.walk(os.getcwd()+"/example_data"):
-        for filename in files:
+            #generates the full path to the file
+            #Example Path: ./example_data/adir/boo.txt
+            fullpath = os.path.join(root, file) 
             
-            #print os.path.join(subdir, file)
-            filepath = subdir + os.sep + filename
-            
-            #if file is a textfile, count all search words inside the file
-            if filepath.endswith(".txt"):
-                count_search_words(filepath)
+            #if a text file, read text file
+            if file.endswith(".txt"):
+                read_file(fullpath)
 
-#counts the amount of times a search word is in a file
-def count_search_words(filename):
-    for word in search_words:
-        indexer_hash[word] = []
-        total = 0    
-        with open(filename) as f:
-            for line in f:
-                finded = line.find(word)
-                if finded != -1 and finded != 0:
-                    total += 1
-        if total > 0:
-          data = [filename, total]
-          indexer_hash[word].append(data)
-
-
-if __name__ == "__main__":
-    find_files()
+#Reads a file for distinct tokens, and organizes the data in a hashtable
+def read_file(filename):
     
-    for i in indexer_hash.keys():
-        print(i, indexer_hash[i])
+    #open file stream
+    f = open(filename)
+
+    #read through the file line by line
+    for line in f:
+        
+        #make the line all lowercase, 
+        #split the line by the space character and newline character,
+        #and filter out any empty strings after splitting
+        word_arr = list(filter(lambda x: x != '' ,re.split("[ ]|[\n]", line.lower())))
+        print(filename.split("/")[-1]+" = "+str(word_arr))
+
+        #loop through the line word by word
+        for word in word_arr:
+
+            #check to see if the word is already a token added to the keyset
+            if word in tok_table.keys():
+                
+                was_found = False
+
+                #if so, then check to see if there exists a hash for file we are querying
+                for i in tok_table[word]:
+                    
+                    #if the file is already in the hashtable, increase the count for THAT keyword for THAT file 
+                    if i[0] == filename.split("/")[-1]:
+                         i[1] += 1
+                         was_found = True
+                         break
+                
+                #else, create a hash for the current keyword with the filename
+                if was_found == False:
+                        tok_table[word].append([filename.split("/")[-1], 1] )
+
+            #else, create a hash for the new keyword with the filename
+            else:
+                #create a list where tokens can be added to
+                tok_table[word] = []
+                #append a tuple where the first element is the filename, the second element is the word count
+                tok_table[word].append( [filename.split("/")[-1], 1] ) 
+                
+
+if __name__ == "__main__": 
+    stroll_file_system("./example_data/")    
+    
+    #print general formatted example for all output
+    print("\nToken\t\t-->\t[Filename, Token_count]\n")
+    
+    #loop through hashtable keys, and print formattted file mappings 
+    for i in sorted(tok_table.keys()):
+        print("'"+i+"'"+"\t\t-->\t"+str(tok_table[i])) 
+            
 
 
