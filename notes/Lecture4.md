@@ -51,9 +51,6 @@ int i;
 //do this
 int i = 0;
 ```
-<b> Find mssing notes for here </b>
-The heap won't exist beyond the lifetime of said process. 
-
 
 #### 
 When returning pointers, you have to be careful to not pass around pointers that aren't pointing to `malloc`ed data. 
@@ -61,12 +58,17 @@ If you return data that isn't `malloc`ed data, the data you are trying to get fr
 
 ```C
 int* func(int b){
+	//create the variable within the stackframe
 	int c = 100;
+	//create a pointer to a variable within the stackframe
 	int *p = &c;
-
+	
+	//return a pointer to a variable within the stackframe. 
+	//(variable will be deleted once the program leaves THIS stackframe)
 	return p;
 }
 
+//Won't be looking at anything because the variable returned will have been deleted from call stack. 
 int* q = func(5);
 ```
 
@@ -77,7 +79,13 @@ int* func(int b){
 	int c = b+1;
 	int* p = (int*) malloc(size(int));
 	
-	//set the data of p equal to the data within c.
+	//set the data of p equal to the data within c, and store outside the stackframe.
 	*p = c;
+	
+	//return the malloced info
+	return p;
 }
+
+//get reference to malloced data
+int *ptr = func(100);
 ```

@@ -1,4 +1,4 @@
-## Lecture 3 - Systems Programmig
+## Systems Programmig - Lecture 3
 
 #### structs and typedef
 

@@ -30,29 +30,28 @@ free(ptr);
 #### Coding Hygeine 
 
 ##### Good Practice
-1. Free everything you malloc
-<b>Always initialize a to a default value.</b>
-```C
-//give something a default value to ensure that 
-//you don't accidenly read garbage data
-int a =-99
+- Free everything you malloc
+- Always initialize a to a default value.
+	```C
+	//give something a default value to ensure that 
+	//you don't accidenly read garbage data
+	int a =-99
 
-//the same can be done
-int* ptr = (int*) calloc(0,sizeof(int));
-```
+	//the same can be done
+	int* ptr = (int*) calloc(0,sizeof(int));
+	```
 
-3. Always have a return variable or staus
+- Always have a return variable or staus
 
 ##### Bad Practice
-1. Using representation directly
+- Using representation directly
 	
 ---
 
 ### What happens when you compile
-
 1. Parses Definitions
 2. Compile Source
-3. Links code with .0 files and links .o files pre-compiled libraries
+3. Links pre-compiled libraries(.o files) with your code
 
 #### Macros
 Macros are a way of predefining information about code before compilation. When the preprocessor, 
@@ -64,17 +63,16 @@ goes in to replace the variables, it literally just does text replacement.
 #define MYHEADER
 #define NUM_CORE_MACHINES 5
 
-#endfi
+#endif
 ```
 
+Using macros that replace code is often a bad idea because the preprocesor doesn't check against memory.
 
-Using macros that replace code is often a bad itea because the preprocesor doesn't check against memory,
+<b>Examples</b>
 
 
 ```C
 #define EXISTS !=0
-
-#endfi
 
 int main(){
 
@@ -89,16 +87,14 @@ int main(){
 ```C
 #ifndef
 #define SQUARE(x) x^x
-#endfi
+#endif
 
 int main(){
-
 	int a =3;
 	int b = SQUARE(a+1);
 	
 	//not the correct 
 	int b = a+1 * a+1;
-
 }
 
 ```
