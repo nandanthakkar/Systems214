@@ -50,6 +50,7 @@ def read_file(filename):
             #check to see if the word is already a token added to the keyset
             if word in tok_table.keys():
                 
+                #keeps track of if the file was found in the hash table
                 was_found = False
 
                 #if so, then check to see if there exists a hash for file we are querying
@@ -73,7 +74,10 @@ def read_file(filename):
                 tok_table[word].append( [filename.split("/")[-1], 1] ) 
                 
 
+#SAME THING AS MAIN METHOD
 if __name__ == "__main__": 
+
+    #run program
     stroll_file_system("./example_data/")    
     
     #print general formatted example for all output
