@@ -42,7 +42,7 @@ def read_file(filename):
         #split the line by the space character and newline character,
         #and filter out any empty strings after splitting
         word_arr = list(filter(lambda x: x != '' ,re.split("[ ]|[\n]", line.lower())))
-        print(filename.split("/")[-1]+" = "+str(word_arr))
+        #print(filename.split("/")[-1]+" = "+str(word_arr))
 
         #loop through the line word by word
         for word in word_arr:
