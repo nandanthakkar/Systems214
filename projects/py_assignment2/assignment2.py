@@ -2,8 +2,8 @@
 """
 AUTHOR:  Douglas Rudolph
 COURSE:  Systems Programming
-PURPOSE: Assignment 2 prototype that shows the logic of 
-         working version of our C-Language based version of Assignment 2
+PURPOSE: Assignment 2 prototype that shows the logic of a working 
+         version of our C-Language based version of Assignment 2.
 """
 
 #import OS python library and REGEX python library
