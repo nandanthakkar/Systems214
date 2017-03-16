@@ -1,21 +1,21 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-//booleans
-static enum _bool{false=0, true=1} bool;
+//boolean types
+typedef enum _bool{false=0, true=1} bool;
 
 //HashNode, data type stored in the hashtable
-struct _HashNode{
+typedef struct _HashNode{
 	char* filename;
 	int token_count;
-	_HashNode* next;	
+	struct _HashNode* next;	
 }HashNode;
 
 //will resize as the hashtable resizes
-static HashNode tok_table[100];
+HashNode tok_table[100];
 
 //linked list that stores the keys to the hashtable in alphanumeric order
-static HashNode keyset_root;
+static HashNode* keyset_root;
 
 //function to walk through the file system
 void stroll_through_files(char* root_dir);
