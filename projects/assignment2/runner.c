@@ -2,7 +2,6 @@
 #include <stdlib.h>
 
 int main(){
-	
     //1. Go through file system
 	//2. Read file that is currently being read
     //3. Populate hashtable
@@ -10,4 +9,3 @@ int main(){
 
 	return 0;
 }
-

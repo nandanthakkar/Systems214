@@ -1,14 +1,25 @@
+/*
+ * AUTHOR:    Douglas Rudolph
+ * FILE:      runner.h
+ * COURSE:    Systems Programming 214
+ * PROFESSOR: Dr. Fransisco
+ */
+
+#ifndef DIRS
+
 #include <stdio.h>
 #include <stdlib.h>
 
+#endif
+
 //boolean types
-typedef enum _bool{false=0, true=1} bool;
+typedef enum _bool{false, true} bool;
 
 //HashNode, data type stored in the hashtable
 typedef struct _HashNode{
 	char* filename;
 	int token_count;
-	struct _HashNode* next;	
+	struct _HashNode* next;
 }HashNode;
 
 //will resize as the hashtable resizes
@@ -25,4 +36,3 @@ void read_files(char* filepath);
 
 //goes through 'tok_table' and exports the data to xml
 void export_to_xml();
-
