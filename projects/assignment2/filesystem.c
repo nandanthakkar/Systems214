@@ -30,6 +30,7 @@
  * Return Type: void
  */
 static void file_system_waltz(const char* dir_name){
+
     DIR * d;
 
     // Open the directory specified by "dir_name".
@@ -54,7 +55,8 @@ static void file_system_waltz(const char* dir_name){
         }
         d_name = entry->d_name;
         
-        /* Print the name of the file and directory. */
+        // Print the name of the file and directory. 
+        // replace with reading a file
         printf ("%s/%s\n", dir_name, d_name);
         
         if (entry->d_type & DT_DIR) {

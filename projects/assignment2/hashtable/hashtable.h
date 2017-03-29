@@ -9,7 +9,7 @@
 #ifndef DIRS
 #include <stdio.h>
 #include <stdlib.h>
-#include "../runner.h"
+#include "../project.h"
 #endif
 
 //put elements in the hashtable based on the token as the given key

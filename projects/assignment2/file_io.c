@@ -3,14 +3,18 @@
 #include <string.h>
 #include <ctype.h>
 #include "project.h"
+#include <sys/stat.h>
 
 char** split(char* str);
+char* readfile(char* filepath);
+unsigned long long int fsize(char* filepath);
 
-    int main(){
-        char* str = "hi, my name is what? my name is, who?, my name is **WIKIKI slim shady!"; 
-        split(str);
-        return 0;
-    }
+int main(){
+    
+    char* str = readfile("./test.txt"); 
+    printf("%s\n", str); 
+    return 0;
+}
 
     /*
      * Purpose: 1. Return a 2D-array of strings that are in the set of Alphanumeric strings.
@@ -65,5 +69,43 @@ char** split(char* str){
     }
 
     return alphas; //return the 2d array
+}
+
+unsigned long long int fsize(char* filepath){
+    
+    FILE* fp = fopen(filepath, "r");
+    fseek(fp, 0, SEEK_END);     // seek to end of file
+    int size = ftell(fp);       // get current file pointer
+    fseek(fp, 0, SEEK_SET);
+    
+    return size;
+}
+
+char* readfile(char* filepath){
+    
+    //create file pointer to file
+    FILE* fp;
+    fp = fopen(filepath,"r");
+    
+    //check to see if file pointer is null, if so end program
+    if(fp == NULL){
+        perror("void read_file(char* filepath):\n couldn't read file read_file\n NULL file pointer");
+        exit(EXIT_FAILURE);
+    }
+    
+    //get the size of the buffer and initialize the buffer to be all 0s
+    unsigned long long int filesize = fsize(filepath);
+    char* buffer = (char*)malloc(sizeof(char)*filesize); 
+    int i=0;
+    for(; i<filesize; i++)
+        buffer[i] = '\0';
+
+    //copy the string to the buffer
+    fread(buffer, sizeof(char), filesize, fp); 
+
+    //close file stream
+    fclose(fp);
+    
+    return buffer;
 }
 
