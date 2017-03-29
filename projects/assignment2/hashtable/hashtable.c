@@ -19,6 +19,6 @@ void rehash(){
 
 }
 
-void destroy_table{
+void destroy_table(){
 
 }
