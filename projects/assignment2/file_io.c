@@ -10,9 +10,12 @@ char* readfile(char* filepath);
 unsigned long long int fsize(char* filepath);
 
 int main(){
+   
+    printf("file size: %llu\n\n", fsize("./filesystem.c"));
     
-    char* str = readfile("./test.txt"); 
-    printf("%s\n", str); 
+    char* fstr = readfile("./filesystem.c"); 
+    split(fstr);   
+   
     return 0;
 }
 
@@ -42,6 +45,13 @@ char** split(char* str){
             inword = true;                  // mark were in a word
             inter_tab[word_count][0] = i;   // mark current pos in the string as word start
         }
+ 
+        else if(inword && str[i+1] == '\0'){
+            inter_tab[word_count][1] = i+1;   // mark the closing char-pos to the word
+            word_count++;                   // increase the word count by 1
+            inword = false;                 // mark that we are no longer in a word
+        }       
+
         //find the end of the word
         else if(inword && !isalpha(str[i]) && !isdigit(str[i])){
             inter_tab[word_count][1] = i;   // mark the closing char-pos to the word
@@ -49,23 +59,19 @@ char** split(char* str){
             inword = false;                 // mark that we are no longer in a word
         }
 
-        else if(inword && str[i+1] == '\0'){
-            inter_tab[word_count][1] = i+1;   // mark the closing char-pos to the word
-            word_count++;                   // increase the word count by 1
-            inword = false;                 // mark that we are no longer in a word
-        }
     }
-    
+
     //make the array of strings
     i=-1;
-    char** alphas = (char**) malloc(sizeof(word_count)); //create a 2D of strings 
+    char** alphas = (char**) malloc(sizeof(char*)*word_count); //create a 2D of strings 
     
     //loop through the indicies found
     for(i=0; i<word_count; i++){
         int interval = inter_tab[i][1]-inter_tab[i][0]; // get the size of the interval
-        alphas[i] = (char*)malloc(sizeof(interval+1));  //malloc the room for the string plus character for the null char
-        sprintf(alphas[i],"(%.*s)", interval, str + inter_tab[i][0]); //write the string the alpha array
-        printf("%s\n",alphas[i]); //print it for testing purposes
+        alphas[i] = (char*) malloc(sizeof(char)*interval+1);  //malloc the room for the string plus character for the null char
+        //sprintf(alphas[i],"(%.*s)", interval, str + inter_tab[i][0]); //write the string the alpha array
+        //printf("%s\n",alphas[i]); //print it for testing purposes
+        //printf("(%.*s)\n", interval, str + inter_tab[i][0]);//test purposes
     }
 
     return alphas; //return the 2d array

@@ -172,7 +172,5 @@ void onLoadUp(int argc, char** argv){
 int main(int argc, char** argv){
    
     //loads constants on start up of the program
-    onLoadUp(argc, argv);    
-
-
+    onLoadUp(argc, argv); 
 }
