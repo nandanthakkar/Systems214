@@ -5,20 +5,14 @@
  * Assignment: Recursive Indexer
  */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
-#include <errno.h>
-#include <sys/types.h>
-// "readdir" etc. are defined here. 
-#include <dirent.h>
-// limits.h defines "PATH_MAX". 
-#include <limits.h>
+#include "filesystem.h"
 
-#include "globals.h"
-#include "project.h"
-
+int main(int argc, char** argv){
+   
+    //loads constants on start up of the program
+    onLoadUp(argc, argv); 
+    return 0;
+}
 
 /* 
  * Purpose: 1. Used to walk through the file systems starting from a certain directory.
@@ -31,22 +25,21 @@
  */
 static void file_system_waltz(const char* dir_name){
 
-    DIR * d;
-
+    DIR* d;
     // Open the directory specified by "dir_name".
 
-    d = opendir (dir_name);
+    d = opendir(dir_name);
 
     /* Check it was opened. */
-    if (! d) {
+    if (!d) {
         fprintf (stderr, "Cannot open directory '%s': %s\n", dir_name, strerror (errno));
         exit (EXIT_FAILURE);
     }
     while(true) {
-        struct dirent * entry;
-        const char * d_name;
+        struct dirent* entry;
+        const char* d_name;
 
-        /* "Readdir" gets subsequent entries from "d". */
+        // "Readdir" gets subsequent entries from "d".
         entry = readdir (d);
         if (! entry) {
             /* There are no more entries in this directory, so break
@@ -169,8 +162,4 @@ void onLoadUp(int argc, char** argv){
         
 }
 
-int main(int argc, char** argv){
-   
-    //loads constants on start up of the program
-    onLoadUp(argc, argv); 
-}
+

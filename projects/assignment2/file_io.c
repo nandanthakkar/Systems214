@@ -5,7 +5,7 @@ int main(){
     printf("file size: %llu\n\n", fsize("./filesystem.c"));
     
     char* fstr = readfile("./filesystem.c"); 
-    split(fstr);   
+    split("abc$12ab12");   
    
     return 0;
 }
@@ -62,7 +62,7 @@ char** split(char* str){
         alphas[i] = (char*) malloc(sizeof(char)*interval+1);  //malloc the room for the string plus character for the null char
         sprintf(alphas[i],"(%.*s)", interval, str + inter_tab[i][0]); //write the string the alpha array
         //printf("%s\n",alphas[i]); //print it for testing purposes
-        printf("(%.*s)\n", interval, str + inter_tab[i][0]);//test purposes
+        printf("%.*s\n", interval, str + inter_tab[i][0]);//test purposes
     }
 
     return alphas; //return the 2d array
