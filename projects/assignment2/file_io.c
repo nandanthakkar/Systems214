@@ -2,11 +2,21 @@
 
 int main(){
    
-    printf("file size: %llu\n\n", fsize("./filesystem.c"));
+    printf("file size together: %llu\n\n", fsize("./test1.txt")+ fsize("./test2.txt"));
     
-    char* fstr = readfile("./filesystem.c"); 
-    split("abc$12ab12");   
+    char* str = readfile("./test1.txt"); 
+    TokenData* test1 = split(str);
+
+    char* str2 = readfile("./test2.txt");
+    TokenData* test2 = split(str2);
    
+    TokenData* merge = merge_data(test1, test2);
+    int i;
+    printf("TOKENS:\n");
+    printf("%s\n", merge->unsort_tokens[0]);
+    printf("%s\n", merge->unsort_tokens[1]);
+
+    printf("Token amount: %d\n\n", merge->tok_amount);
     return 0;
 }
 
@@ -21,7 +31,7 @@ int main(){
      *
      * Example: "hello, $my*name 1s albert." => "['hello', 'my', 'name', 's', 'albert']"
      */
-char** split(char* str){
+TokenData* split(char* str){
         
     int inter_tab[strlen(str)][2]; //array of ints that represent the starting and ending points of alphenumerics
     int word_count = 0;//stores how many alphanumerics have been found
@@ -37,7 +47,7 @@ char** split(char* str){
             inter_tab[word_count][0] = i;   // mark current pos in the string as word start
         }
  
-        else if(inword && str[i+1] == '\0'){
+        else if(inword && str[i+1] == '\n' || inword && str[i+1] == '\0'){
             inter_tab[word_count][1] = i+1;   // mark the closing char-pos to the word
             word_count++;                   // increase the word count by 1
             inword = false;                 // mark that we are no longer in a word
@@ -60,23 +70,12 @@ char** split(char* str){
     for(i=0; i<word_count; i++){
         int interval = inter_tab[i][1]-inter_tab[i][0]; // get the size of the interval
         alphas[i] = (char*) malloc(sizeof(char)*interval+1);  //malloc the room for the string plus character for the null char
-        sprintf(alphas[i],"(%.*s)", interval, str + inter_tab[i][0]); //write the string the alpha array
+        sprintf(alphas[i],"%.*s", interval, str + inter_tab[i][0]); //write the string the alpha array
         //printf("%s\n",alphas[i]); //print it for testing purposes
-        printf("%.*s\n", interval, str + inter_tab[i][0]);//test purposes
+        //printf("%.*s\n", interval, str + inter_tab[i][0]);//test purposes
     }
     
-    _sort_split(alphas);
-    return alphas; //return the 2d array
-}
-
-unsigned long long int fsize(char* filepath){
-    
-    FILE* fp = fopen(filepath, "r");
-    fseek(fp, 0, SEEK_END);     // seek to end of file
-    int size = ftell(fp);       // get current file pointer
-    fseek(fp, 0, SEEK_SET);
-    
-    return size;
+    return create_token_data(alphas ,word_count); //return struct with tokens and amount
 }
 
 char* readfile(char* filepath){
@@ -107,8 +106,42 @@ char* readfile(char* filepath){
     return buffer;
 }
 
-char** _sort_split(char** tokens){
+unsigned long long int fsize(char* filepath){
     
+    FILE* fp = fopen(filepath, "r");
+    fseek(fp, 0, SEEK_END);     // seek to end of file
+    int size = ftell(fp);       // get current file pointer
+    fseek(fp, 0, SEEK_SET);
+    
+    return size;
+}
 
+TokenData* create_token_data(char** unsort_tokens, int tok_amount){
+   TokenData* tok = (TokenData*) malloc(sizeof(TokenData));
+
+   tok->unsort_tokens = unsort_tokens;
+   tok->tok_amount = tok_amount;
+}
+
+TokenData* merge_data(TokenData* a, TokenData* b){
+    
+    //malloc room for the new token data
+    char** new_toks = (char**) malloc(sizeof(char*)*(a->tok_amount + b->tok_amount));
+    
+    //copy over the old data from TokenData a
+    int offset=0;
+    int i;
+
+    for(i=0; i < a->tok_amount; i++, offset++){
+        new_toks[i] = a->unsort_tokens[i]; 
+    }
+
+    //copy over the old data from TokenData b
+    for(i=0; i < b->tok_amount; i++){
+        new_toks[i+offset] = b->unsort_tokens[i]; 
+    }
+    
+    TokenData* new_data = create_token_data(new_toks, (a->tok_amount + b->tok_amount)); 
+    return new_data;
 }
 
