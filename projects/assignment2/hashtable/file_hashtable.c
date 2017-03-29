@@ -1,4 +1,6 @@
 #include "hashtable.h"
+#include "./../file_io.c"
+
 
 TokenNode* create_token_node(char* token_val){
     //malloc room for a token
@@ -14,7 +16,7 @@ TokenNode* create_token_node(char* token_val){
     return node;
 }
 
-FileHash* create_filehash(char* filename, char** tokens){
+FileHash* create_filehash(char* filename, TokenData* token_list){
     //TODO: get rid of file extesion 
     
     FileHash* node = (FileHash*) malloc(sizeof(FileHash));
@@ -22,8 +24,8 @@ FileHash* create_filehash(char* filename, char** tokens){
     strcpy(node->filename, filename);    
     
     //copy the location of the token list from split into the hashtable
-    node->token_list = tokens;
-    
+    node->tokens = token_list;
+
     //set the next file to null
     node->next = NULL;
 
@@ -38,7 +40,7 @@ int hash_id(char c){
     exit(EXIT_FAILURE);
 }
 
-void put_filehash(char* filename, char** tokens){
+void put_filehash(char* filename, TokenData* token_list){
    
     //check to make sure the filename works
     if(filename == NULL){
@@ -52,48 +54,51 @@ void put_filehash(char* filename, char** tokens){
     //if there are no files added to the index list, add the first
     if(file_table[index] == NULL){
         printf("0\n");
-        file_table[index] = create_filehash(filename, tokens);
+        file_table[index] = create_filehash(filename, token_list);
     }
     
     //otherwise, insert alphabetically based on file name and insert
     else{
         FileHash* ptr = file_table[index];
-        
        
         //checks for all cases in the middle of the list
         for(; ptr->next != NULL; ptr = ptr->next){
             
-            //check if the next word and the 
+            //put a word in between 2 words based on name 
             if(strcmp(filename, ptr->filename)>0 &&
                strcmp(filename, ptr->next->filename)<0){
                 
                 FileHash* temp = ptr->next;
-                ptr->next = create_filehash(filename, tokens);
+                ptr->next = create_filehash(filename, token_list);
                 ptr->next->next = temp;
                 
                 return;        
             }
+
+            //merge tokens if the files share the same name
             else if(strcmp(filename, ptr->next->filename) == 0){
 
                 //todo: merge char** in ptr->next with the current node
                 
-
-                //return
+                FileHash* temp = create_filehash(filename, token_list);
+                ptr->tokens = merge_data(temp->tokens, ptr->tokens);
+                return;
             }
         }
         
         //insert second node
-        if(strcmp(filename, file_table[0]->filename) == 0){
-            //merge 
+        if(strcmp(filename, file_table[index]->filename) == 0){
+            FileHash* temp = create_filehash(filename, token_list);
+            file_table[index]->tokens = merge_data(temp->tokens, file_table[index]->tokens);
+            //file_table[index] = merge_data(
         }
-        else if(strcmp(file_table[0]->filename, filename) > 0){
+        else if(strcmp(file_table[index]->filename, filename) > 0){
             FileHash* temp = file_table[index];
-            file_table[index] = create_filehash(filename, tokens);
+            file_table[index] = create_filehash(filename, token_list);
             file_table[index] -> next = temp;
-            
         }
         else if(strcmp(file_table[0]->filename, filename) < 0){
-            file_table[index]->next = create_filehash(filename, tokens);
+            file_table[index]->next = create_filehash(filename, token_list);
         }
 
         //if we get here, there is only 1 element in the list, thus it either goes
@@ -104,9 +109,18 @@ void put_filehash(char* filename, char** tokens){
 
 int main(){
     
-    put_filehash("ac.txt", NULL);
-    put_filehash("aa.txt", NULL);
-    put_filehash("ab.txt", NULL);
+    char* str = readfile("./aa.txt");
+    TokenData* a = split(str);
+    
+    char* str2 = readfile("./ab.txt");
+    TokenData* b = split(str2);
+    
+    char* str3 = readfile("./ac.txt");
+    TokenData* c = split(str3);
+
+    put_filehash("ac.txt", c);
+    put_filehash("aa.txt", a);
+    put_filehash("ab.txt", b);
     printf("%s\n", file_table[0]->filename);
     printf("%s\n", file_table[0]->next->filename); 
     printf("%s\n", file_table[0]->next->next->filename); 

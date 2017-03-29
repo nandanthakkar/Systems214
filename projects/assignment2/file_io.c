@@ -1,6 +1,6 @@
 #include "file_io.h"
 
-int main(){
+/*int main(){
    
     printf("file size together: %llu\n\n", fsize("./test1.txt")+ fsize("./test2.txt"));
     
@@ -18,7 +18,7 @@ int main(){
 
     printf("Token amount: %d\n\n", merge->tok_amount);
     return 0;
-}
+}*/
 
     /*
      * Purpose: 1. Return a 2D-array of strings that are in the set of Alphanumeric strings.

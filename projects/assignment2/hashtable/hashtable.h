@@ -11,7 +11,6 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <string.h>
-#include "../project.h"
 #endif
 
 typedef struct tok_node{
@@ -21,7 +20,7 @@ typedef struct tok_node{
 
 typedef struct _filehash{
     char* filename;         //name of file
-    char** token_list;
+    TokenData* tokens;
     struct _filehash* next; //next file that starts with the same character
 } FileHash;
 
