@@ -1,13 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <ctype.h>
-#include "project.h"
-#include <sys/stat.h>
-
-char** split(char* str);
-char* readfile(char* filepath);
-unsigned long long int fsize(char* filepath);
+#include "file_io.h"
 
 int main(){
    
@@ -69,9 +60,9 @@ char** split(char* str){
     for(i=0; i<word_count; i++){
         int interval = inter_tab[i][1]-inter_tab[i][0]; // get the size of the interval
         alphas[i] = (char*) malloc(sizeof(char)*interval+1);  //malloc the room for the string plus character for the null char
-        //sprintf(alphas[i],"(%.*s)", interval, str + inter_tab[i][0]); //write the string the alpha array
+        sprintf(alphas[i],"(%.*s)", interval, str + inter_tab[i][0]); //write the string the alpha array
         //printf("%s\n",alphas[i]); //print it for testing purposes
-        //printf("(%.*s)\n", interval, str + inter_tab[i][0]);//test purposes
+        printf("(%.*s)\n", interval, str + inter_tab[i][0]);//test purposes
     }
 
     return alphas; //return the 2d array
