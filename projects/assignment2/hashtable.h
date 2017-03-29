@@ -6,17 +6,15 @@
  */
 
 //If libraries are not included, include them
-#ifndef DIRS
+#ifndef HEADER
+#define HEADER
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
 #include <string.h>
+#include "file_io.h"
 #endif
 
-typedef struct tok_node{
-    char* token_txt;
-    struct tok_node* next;
-}TokenNode;
 
 typedef struct _filehash{
     char* filename;         //name of file
