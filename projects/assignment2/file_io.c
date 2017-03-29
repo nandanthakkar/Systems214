@@ -7,7 +7,7 @@
 char** split(char* str);
 
     int main(){
-        char* str = "*(*)9)(8)(*)(*0(*)(*)(8)(8)(8&676*77868&^-"; 
+        char* str = "hi, my name is what? my name is, who?, my name is **WIKIKI slim shady!"; 
         split(str);
         return 0;
     }
@@ -38,15 +38,15 @@ char** split(char* str){
             inword = true;                  // mark were in a word
             inter_tab[word_count][0] = i;   // mark current pos in the string as word start
         }
-
-        else if(inword && str[i+1] == '\0'){
-            inter_tab[word_count][1] = i+1;   // mark the closing char-pos to the word
-            word_count++;                   // increase the word count by 1
-            inword = false;                 // mark that we are no longer in a word
-        }
         //find the end of the word
         else if(inword && !isalpha(str[i]) && !isdigit(str[i])){
             inter_tab[word_count][1] = i;   // mark the closing char-pos to the word
+            word_count++;                   // increase the word count by 1
+            inword = false;                 // mark that we are no longer in a word
+        }
+
+        else if(inword && str[i+1] == '\0'){
+            inter_tab[word_count][1] = i+1;   // mark the closing char-pos to the word
             word_count++;                   // increase the word count by 1
             inword = false;                 // mark that we are no longer in a word
         }
@@ -54,14 +54,16 @@ char** split(char* str){
     
     //make the array of strings
     i=-1;
-    char** alphas = (char**) malloc(sizeof(word_count));
+    char** alphas = (char**) malloc(sizeof(word_count)); //create a 2D of strings 
+    
+    //loop through the indicies found
     for(i=0; i<word_count; i++){
-        int interval = inter_tab[i][1]-inter_tab[i][0];
-        alphas[i] = (char*)malloc(sizeof(interval+1));
-        sprintf(alphas[i],"(%.*s)", interval, str + inter_tab[i][0]);
-        printf("%s\n",alphas[i]);
+        int interval = inter_tab[i][1]-inter_tab[i][0]; // get the size of the interval
+        alphas[i] = (char*)malloc(sizeof(interval+1));  //malloc the room for the string plus character for the null char
+        sprintf(alphas[i],"(%.*s)", interval, str + inter_tab[i][0]); //write the string the alpha array
+        printf("%s\n",alphas[i]); //print it for testing purposes
     }
 
-    return alphas;
+    return alphas; //return the 2d array
 }
 
