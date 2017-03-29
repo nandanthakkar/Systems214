@@ -12,6 +12,7 @@
 
 #include "globals.h"
 #include "project.h"
+#include "file_io.h"
 #endif
 
 static void file_system_waltz(const char* dir_name);
