@@ -9,20 +9,22 @@
 #ifndef DIRS
 #include <stdio.h>
 #include <stdlib.h>
+#include <ctype.h>
+#include <string.h>
 #include "../project.h"
 #endif
 
-//put elements in the hashtable based on the token as the given key
-void put(char* key, HashNode node);
+typedef struct tok_node{
+    char* token_txt;
+    struct tok_node* next;
+}TokenNode;
 
-//add key to the list
-void addkey(char* key);
+typedef struct _filehash{
+    char* filename;         //name of file
+    char** token_list;
+    struct _filehash* next; //next file that starts with the same character
+} FileHash;
 
-//used to generate the hashing location for a given key
-int generate_hash();
 
-//resets the size of the hashtable
-void rehash();
+static FileHash* file_table[26];
 
-//go through a delete all the objects in the table
-void destroy_table();

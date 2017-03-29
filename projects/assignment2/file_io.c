@@ -64,7 +64,8 @@ char** split(char* str){
         //printf("%s\n",alphas[i]); //print it for testing purposes
         printf("%.*s\n", interval, str + inter_tab[i][0]);//test purposes
     }
-
+    
+    _sort_split(alphas);
     return alphas; //return the 2d array
 }
 
@@ -104,5 +105,10 @@ char* readfile(char* filepath){
     fclose(fp);
     
     return buffer;
+}
+
+char** _sort_split(char** tokens){
+    
+
 }
 

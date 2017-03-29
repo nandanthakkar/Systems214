@@ -8,6 +8,7 @@
 #endif
 
 char** split(char* str);
+char** _sort_split(char** tokens);
 char* readfile(char* filepath);
 unsigned long long int fsize(char* filepath);
 
