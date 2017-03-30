@@ -26,6 +26,12 @@ typedef struct _filename{
     struct _filename* next; 
 }FileName;
 
+typedef struct _token_node{
+    char* token;
+    struct _token_node* next;
+    int count;
+}TokenNode;
+
 static FileName* keyset;
 static FileHash* file_table[26];
 

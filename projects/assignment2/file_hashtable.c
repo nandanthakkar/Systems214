@@ -15,7 +15,6 @@ FileHash* create_filehash(char* filename, TokenData* token_list){
     return node;
 }
 
-
 FileName* create_keyset_elem(char* filename){
    
     //malloc data for the struct as well the as the filname
@@ -29,6 +28,20 @@ FileName* create_keyset_elem(char* filename){
     strcpy(file_node->filename,filename);
 
     return file_node;
+}
+
+TokenNode* create_token_node(char* filename){
+    
+    //create token
+    TokenNode* tok = (TokenNode*) malloc(sizeof(TokenNode));
+    
+    //store string
+    tok->token = (char*)malloc(sizeof(strlen(filename)+1));
+    strcpy(tok->token, filename);
+    
+    tok->count = 1;
+
+    return tok;
 }
 
 void append_file_to_keyset(char * filename){
@@ -157,27 +170,148 @@ void put_filehash(char* filename, TokenData* token_list){
 
 }
 
-int main(){
-    char* str = readfile("./test_files/one/aa.txt");
-    TokenData* a = split(str);
+int compare_str(char* a, char* b){
+   
+    int size_a = strlen(a);
+    int size_b = strlen(b);
     
-    char* str2 = readfile("./test_files/aa.txt");
-    TokenData* b = split(str2);
+    //gets the min length between two strings
+    int LEN=0;
     
-    put_filehash("bc.txt", a);
-    put_filehash("ab.txt", a);
-    put_filehash("aa.txt", a);
-    put_filehash("zz.txt", a);
-    
-    //if(keyset->next == NULL)
-    //printf("\n\n%s\n", keyset->filename);
-    printf("%s\n", keyset->next->filename);
-    printf("%s\n", keyset->next->next->filename);
-    printf("%s\n", keyset->next->next->next->filename);
-    //printf("%s, %d\n", file_table[0]->filename, file_table[0]->tokens->tok_amount);
-    // printf("%s\n", file_table[0]->next->filename); 
-    return 0;
+    //get the min number
+    if(size_a != size_b){
+        LEN = (size_a < size_b)?size_a:size_b;
+    }
+    else{
+        LEN = size_a;
+    }
+     
+    int weight = 0;
+
+    int i=-1;
+    for(i=0; i < LEN; i++){
+
+        //if they are both numbers
+        if(isdigit(a[i]) && isdigit(b[i])){
+            weight += ((int)100+a[i]) - ((int)100+b[i]); 
+        }
+
+        //if a is a leter and b is a digit
+        else if(!isdigit(a[i]) && isdigit(b[i])){
+            weight += ((int)a[i]) - ((int)100+b[i]);
+        }
+        
+        //if a is a digit and b is a letter
+        else if(isdigit(a[i]) && !isdigit(b[i])){
+            weight += ((int)100+a[i]) - ((int)b[i]); 
+        }
+
+        //if they are both chars
+        else{
+            weight += ((int)a[i]) - ((int)b[i]); 
+        }
+    }
+
+    //LOOP THROUGH TO THROW THE WAIT OFF
+    if(size_a > size_b){
+        for(; i<size_a; i++){
+                
+            //if they are both numbers
+            if(isdigit(a[i]) && isdigit(b[i])){
+                weight += ((int)100+a[i]) - 0; 
+            }
+
+            //if a is a leter and b is a digit
+            else if(!isdigit(a[i]) && isdigit(b[i])){
+                weight += ((int)a[i]) - 0;
+            }
+            
+            //if a is a digit and b is a letter
+            else if(isdigit(a[i]) && !isdigit(b[i])){
+                weight += ((int)100+a[i]) - 0; 
+            }
+
+            //if they are both chars
+            else{
+                weight += ((int)a[i])-0; 
+            }
+        }
+    }
+    else if(size_b > size_a){
+        
+        for(; i<size_b; i++){
+                
+            //if they are both numbers
+            if(isdigit(a[i]) && isdigit(b[i])){
+                weight += 0 -((int)100+b[i]) ; 
+            }
+
+            //if a is a leter and b is a digit
+            else if(!isdigit(a[i]) && isdigit(b[i])){
+                weight += 0 - ((int)b[i]);
+            }
+            
+            //if a is a digit and b is a letter
+            else if(isdigit(a[i]) && !isdigit(b[i])){
+                weight += 0 - ((int)100+b[i]); 
+            }
+
+            //if they are both chars
+            else{
+                weight += 0 - ((int)b[i]); 
+            }
+        }
+    }
+
+    return weight;
 }
 
+void sort(char** array, int SIZE){
+    char** sort_arr;
+    int i=0;
+    TokenNode* head = NULL;
+    
+    //link the first string into the list
+    head = create_token_node(array[i]);
+    i++;
 
+    //link the second element
+
+    for(;i < SIZE; i++){
+        
+        TokenNode* ptr = head;
+        for(;ptr != NULL; ptr = ptr->next){
+            
+            //should come before the beginnnig of the list
+            if(ptr != NULL && 
+                compare_str(ptr->token,array[i]) > 0){
+                
+                TokenNode* temp = head;
+                head = create_token_node(array[i]);
+                head->next = temp;
+            }            
+
+            //if they are the same string
+            else if(compare_str(array[i], ptr->token)==0 && 
+                    strlen(array[i]) == strlen(ptr->token)){
+                ptr->count++;
+            }
+        }
+    }
+    
+    printf("%s\n",head->token);
+    printf("%s\n", head->next->token);
+
+}
+
+int main(){
+    
+    char* arr[] = {"ad0","ad"};
+    //sort(arr, 2);
+    
+    printf("a = ad0, b = ad\n output: %d\n\n", compare_str(arr[0], arr[1]));
+    printf("a = ad, b = ad0\n output: %d\n", compare_str(arr[1], arr[0]));
+    
+    return 0;
+}
 
