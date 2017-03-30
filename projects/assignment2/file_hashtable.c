@@ -1,3 +1,4 @@
+#include <unistd.h>
 #include "hashtable.h" 
 
 FileHash* create_filehash(char* filename, TokenData* token_list){
@@ -193,17 +194,18 @@ int compare_str(char* a, char* b){
 
         //if they are both numbers
         if(isdigit(a[i]) && isdigit(b[i])){
-            weight += ((int)100+a[i]) - ((int)100+b[i]); 
+            weight += ((int)98+a[i]) - ((int)98+b[i]); 
         }
 
         //if a is a leter and b is a digit
         else if(!isdigit(a[i]) && isdigit(b[i])){
-            weight += ((int)a[i]) - ((int)100+b[i]);
+            weight += (a[i]) - (((int)b[i])+98);
+            printf("%d - %d = %d\n", ((int)a[i]),((int)98+b[i]), (a[i]) - ((int)98+b[i]));
         }
         
         //if a is a digit and b is a letter
         else if(isdigit(a[i]) && !isdigit(b[i])){
-            weight += ((int)100+a[i]) - ((int)b[i]); 
+            weight += ((int)98+a[i]) - ((int)b[i]); 
         }
 
         //if they are both chars
@@ -217,18 +219,18 @@ int compare_str(char* a, char* b){
         for(; i<size_a; i++){
                 
             //if they are both numbers
-            if(isdigit(a[i]) && isdigit(b[i])){
-                weight += ((int)100+a[i]) - 0; 
+            if(isdigit(a[i])){ 
+                weight += ((int)98+a[i]) - 0; 
             }
 
             //if a is a leter and b is a digit
-            else if(!isdigit(a[i]) && isdigit(b[i])){
+            else if(!isdigit(a[i])){
                 weight += ((int)a[i]) - 0;
             }
             
             //if a is a digit and b is a letter
-            else if(isdigit(a[i]) && !isdigit(b[i])){
-                weight += ((int)100+a[i]) - 0; 
+            else if(isdigit(a[i])){
+                weight += ((int)98+a[i]) - 0; 
             }
 
             //if they are both chars
@@ -242,18 +244,18 @@ int compare_str(char* a, char* b){
         for(; i<size_b; i++){
                 
             //if they are both numbers
-            if(isdigit(a[i]) && isdigit(b[i])){
-                weight += 0 -((int)100+b[i]) ; 
+            if(isdigit(b[i])){
+                weight += 0 -((int)98+b[i]) ; 
             }
 
             //if a is a leter and b is a digit
-            else if(!isdigit(a[i]) && isdigit(b[i])){
+            else if(isdigit(b[i])){
                 weight += 0 - ((int)b[i]);
             }
             
             //if a is a digit and b is a letter
-            else if(isdigit(a[i]) && !isdigit(b[i])){
-                weight += 0 - ((int)100+b[i]); 
+            else if(!isdigit(b[i])){
+                weight += 0 - ((int)98+b[i]); 
             }
 
             //if they are both chars
@@ -273,6 +275,7 @@ void sort(char** array, int SIZE){
     
     //link the first string into the list
     head = create_token_node(array[i]);
+    printf("0\n");
     i++;
 
     //link the second element
@@ -283,9 +286,10 @@ void sort(char** array, int SIZE){
         for(;ptr != NULL; ptr = ptr->next){
             
             //should come before the beginnnig of the list
-            if(ptr != NULL && 
-                compare_str(ptr->token,array[i]) > 0){
+            if(ptr != NULL && ptr == head && 
+                compare_str(array[i], ptr->token) < 0){
                 
+                printf("1\n");
                 TokenNode* temp = head;
                 head = create_token_node(array[i]);
                 head->next = temp;
@@ -294,24 +298,43 @@ void sort(char** array, int SIZE){
             //if they are the same string
             else if(compare_str(array[i], ptr->token)==0 && 
                     strlen(array[i]) == strlen(ptr->token)){
+                
+                printf("2\n");
                 ptr->count++;
+            }
+            
+            //if we are at the end and we want to append to the end of the list
+            else if(ptr->next == NULL && compare_str(array[i], ptr->token)>0){
+                printf("3\n");
+                ptr->next = create_token_node(array[i]);
+                ptr = ptr->next;
+            }
+            else if(ptr->next != NULL && 
+                    compare_str(array[i], ptr->token)>0 &&
+                    compare_str(array[i], ptr->next->token)<0){
+               
+               printf("4\n");
+                
+               TokenNode* temp = ptr->next;
+               ptr->next = create_token_node(array[i]);
+               ptr->next->next = temp;
+               ptr = ptr->next->next;
             }
         }
     }
     
-    printf("%s\n",head->token);
+    printf("%s\n", head->token);
     printf("%s\n", head->next->token);
-
+    printf("%s\n", head->next->next->token);
+    printf("%s\n", head->next->next->next->token);
 }
 
 int main(){
     
-    char* arr[] = {"ad0","ad"};
-    //sort(arr, 2);
+    char* arr[] = {"ab","a0","ad","zz"};
+    sort(arr, 4);
     
-    printf("a = ad0, b = ad\n output: %d\n\n", compare_str(arr[0], arr[1]));
-    printf("a = ad, b = ad0\n output: %d\n", compare_str(arr[1], arr[0]));
-    
+
     return 0;
 }
 
