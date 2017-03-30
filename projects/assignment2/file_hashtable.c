@@ -1,5 +1,3 @@
-#include <unistd.h>
-
 #include "hashtable.h" 
 #include "project.h"
 
@@ -230,7 +228,7 @@ int compare_str(char* a, char* b){
     return weight;
 }
 
-void sort(char** array, int SIZE){
+TokenNode* sort(char** array, int SIZE){
     char** sort_arr;
     int i=0;
     TokenNode* head = NULL;
@@ -285,18 +283,16 @@ void sort(char** array, int SIZE){
             }
         }
     }
-    
-    printf("%s\n", head->token);
-    printf("%s\n", head->next->token);
-    printf("%s\n", head->next->next->token);
-    printf("%s\n", head->next->next->next->token);
-    printf("%s\n", head->next->next->next->next->token);
+
+    return head;
 }
 
 int main(){
     
     char* arr[] = {"ab","a0","ad","zz", "aa0"};
-    sort(arr, 5);
+   
+    TokenNode* data = sort(arr, 5);
+
     return 0;
 }
 
