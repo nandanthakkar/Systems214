@@ -1,5 +1,4 @@
 #include "hashtable.h" 
-#include "project.h"
 
 FileHash* create_filehash(char* filename, TokenData* token_list){
     
@@ -235,7 +234,6 @@ TokenNode* sort(char** array, int SIZE){
     
     //link the first string into the list
     head = create_token_node(array[i]);
-    printf("0\n");
     i++;
 
     //link the second element
@@ -249,7 +247,6 @@ TokenNode* sort(char** array, int SIZE){
             if(ptr != NULL && ptr == head && 
                 compare_str(array[i], ptr->token) < 0){
                 
-                printf("1\n");
                 TokenNode* temp = head;
                 head = create_token_node(array[i]);
                 head->next = temp;
@@ -260,13 +257,11 @@ TokenNode* sort(char** array, int SIZE){
             else if(compare_str(array[i], ptr->token)==0 && 
                     strlen(array[i]) == strlen(ptr->token)){
                 
-                printf("2\n");
                 ptr->count++;
             }
             
             //if we are at the end and we want to append to the end of the list
             else if(ptr->next == NULL && compare_str(array[i], ptr->token)>0){
-                printf("3\n");
                 ptr->next = create_token_node(array[i]);
                 ptr = ptr->next;
             }
@@ -274,7 +269,6 @@ TokenNode* sort(char** array, int SIZE){
                     compare_str(array[i], ptr->token)>0 &&
                     compare_str(array[i], ptr->next->token)<0){
                
-               printf("4\n");
                 
                TokenNode* temp = ptr->next;
                ptr->next = create_token_node(array[i]);
@@ -289,9 +283,16 @@ TokenNode* sort(char** array, int SIZE){
 
 int main(){
     
-    char* arr[] = {"ab","a0","ad","zz", "aa0"};
+    char* arr[] = {"ab","a0","ad","zz", "aa0", "a0b"};
    
-    TokenNode* data = sort(arr, 5);
+    int size =5;
+    TokenNode* data = sort(arr, size);
+    int i;
+    TokenNode* ptr = data;
+    for(i=0; i<size; i++){
+        printf("%s\n", ptr->token);
+        ptr = ptr->next;
+    }
 
     return 0;
 }
