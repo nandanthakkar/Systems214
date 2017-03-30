@@ -1,5 +1,7 @@
 #include <unistd.h>
+
 #include "hashtable.h" 
+#include "project.h"
 
 FileHash* create_filehash(char* filename, TokenData* token_list){
     
@@ -175,20 +177,20 @@ int compare_str(char* a, char* b){
    
     int size_a = strlen(a);
     int size_b = strlen(b);
-    
     //gets the min length between two strings
     int LEN=0;
     
     //get the min number
-    if(size_a != size_b){
-        LEN = (size_a < size_b)?size_a:size_b;
-    }
-    else{
+    if(size_a < size_b)
         LEN = size_a;
-    }
-     
+    else if(size_b < size_a)
+        LEN = size_b;
+    else
+        LEN = size_a;
+    
+    
+    bool same_prefix = true;
     int weight = 0;
-
     int i=-1;
     for(i=0; i < LEN; i++){
 
@@ -200,7 +202,6 @@ int compare_str(char* a, char* b){
         //if a is a leter and b is a digit
         else if(!isdigit(a[i]) && isdigit(b[i])){
             weight += (a[i]) - (((int)b[i])+98);
-            printf("%d - %d = %d\n", ((int)a[i]),((int)98+b[i]), (a[i]) - ((int)98+b[i]));
         }
         
         //if a is a digit and b is a letter
@@ -212,58 +213,19 @@ int compare_str(char* a, char* b){
         else{
             weight += ((int)a[i]) - ((int)b[i]); 
         }
-    }
-
-    //LOOP THROUGH TO THROW THE WAIT OFF
-    if(size_a > size_b){
-        for(; i<size_a; i++){
-                
-            //if they are both numbers
-            if(isdigit(a[i])){ 
-                weight += ((int)98+a[i]) - 0; 
-            }
-
-            //if a is a leter and b is a digit
-            else if(!isdigit(a[i])){
-                weight += ((int)a[i]) - 0;
-            }
-            
-            //if a is a digit and b is a letter
-            else if(isdigit(a[i])){
-                weight += ((int)98+a[i]) - 0; 
-            }
-
-            //if they are both chars
-            else{
-                weight += ((int)a[i])-0; 
-            }
+    
+        if(a[i] != b[i] && same_prefix == true){
+            same_prefix = false;
         }
     }
-    else if(size_b > size_a){
-        
-        for(; i<size_b; i++){
-                
-            //if they are both numbers
-            if(isdigit(b[i])){
-                weight += 0 -((int)98+b[i]) ; 
-            }
 
-            //if a is a leter and b is a digit
-            else if(isdigit(b[i])){
-                weight += 0 - ((int)b[i]);
-            }
-            
-            //if a is a digit and b is a letter
-            else if(!isdigit(b[i])){
-                weight += 0 - ((int)98+b[i]); 
-            }
-
-            //if they are both chars
-            else{
-                weight += 0 - ((int)b[i]); 
-            }
-        }
-    }
+    //aka they are the same beginning of the word
+    if(same_prefix==true && size_a > size_b){
+        return 1;
+    } 
+    else if(same_prefix==true && size_a < size_b){
+        return -1;
+    } 
 
     return weight;
 }
@@ -293,6 +255,7 @@ void sort(char** array, int SIZE){
                 TokenNode* temp = head;
                 head = create_token_node(array[i]);
                 head->next = temp;
+                ptr = ptr->next;
             }            
 
             //if they are the same string
@@ -327,14 +290,13 @@ void sort(char** array, int SIZE){
     printf("%s\n", head->next->token);
     printf("%s\n", head->next->next->token);
     printf("%s\n", head->next->next->next->token);
+    printf("%s\n", head->next->next->next->next->token);
 }
 
 int main(){
     
-    char* arr[] = {"ab","a0","ad","zz"};
-    sort(arr, 4);
-    
-
+    char* arr[] = {"ab","a0","ad","zz", "aa0"};
+    sort(arr, 5);
     return 0;
 }
 
