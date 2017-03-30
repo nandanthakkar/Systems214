@@ -59,7 +59,6 @@ TokenData* split(char* str){
             word_count++;                   // increase the word count by 1
             inword = false;                 // mark that we are no longer in a word
         }
-
     }
 
     //make the array of strings
