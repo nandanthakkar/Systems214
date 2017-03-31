@@ -153,11 +153,10 @@ TokenData* merge_data(TokenData* a, TokenData* b){
  *
  * Return Type: void
  */
-static void file_system_waltz(const char* dir_name){
+void file_system_waltz(const char* dir_name){
 
-    DIR* d;
     // Open the directory specified by "dir_name".
-
+    DIR* d;
     d = opendir(dir_name);
 
     /* Check it was opened. */
@@ -170,18 +169,35 @@ static void file_system_waltz(const char* dir_name){
         const char* d_name;
 
         // "Readdir" gets subsequent entries from "d".
-        entry = readdir (d);
+        entry = readdir(d);
         if (! entry) {
-            /* There are no more entries in this directory, so break
-               out of the while loop. */
+            //There are no more entries in this directory, so break
+            //out of the while loop. 
             break;
         }
-        d_name = entry->d_name;
         
+        d_name = entry->d_name;
         // Print the name of the file and directory. 
         // replace with reading a file
-        printf ("%s/%s\n", dir_name, d_name);
+        if(entry->d_type == DT_REG && entry->d_type != DT_DIR){
+            //printf("%s/%s\n", dir_name, d_name);
+            
+            //buffer for path name
+            char file_to_read[1024];
+
+            //get the path to the filename as a string
+            sprintf(file_to_read,"%s/%s", dir_name, d_name);
+            
+            //get the file as a string
+            char* file_str = readfile(file_to_read);
+            printf("%s\n\n", file_str); 
+            //split the file_str into tokens
+            
+            //store tokens in a hashtable
         
+        }
+
+
         if (entry->d_type & DT_DIR) {
 
             /* Check that the directory is not "d" or d's parent. */

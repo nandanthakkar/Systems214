@@ -48,7 +48,7 @@ void append_file_to_keyset(char * filename){
     
     //if empty, add the the first filename
     if(keyset == NULL){
-        keyset = create_keyset_elem(filename);
+        keyset= create_keyset_elem(filename);
     }  
     //if the new filename is less than the first filename based on strcmp, add to front
     else if(strcmp(filename, keyset->filename) < 0){
@@ -102,6 +102,15 @@ int hash_id(char c){
     exit(EXIT_FAILURE);
 }
 
+
+/*
+ * char** tokens readfile(filename)// read tokens from file
+ * TokenData data = create_token_data(token, amount) //store the token into struct
+ * put_filehash(filename) //put data into hashtable
+ * extract_data() //loop through keyset and get all nodes
+ * write to file
+ *
+ */
 void put_filehash(char* filename, TokenData* token_list){
    
     //check to make sure the filename works
@@ -167,7 +176,6 @@ void put_filehash(char* filename, TokenData* token_list){
         //if we get here, there is only 1 element in the list, thus it either goes
         //at the end, or the tokens get merged into the first node    
     }
-
 }
 
 int compare_str(char* a, char* b){
@@ -227,8 +235,8 @@ int compare_str(char* a, char* b){
     return weight;
 }
 
-TokenNode* sort(char** array, int SIZE){
-    char** sort_arr;
+TokenNode* sort(TokenData* data, int SIZE){
+    char** array = data->unsort_tokens;
     int i=0;
     TokenNode* head = NULL;
     
@@ -281,19 +289,4 @@ TokenNode* sort(char** array, int SIZE){
     return head;
 }
 
-int main(){
-    
-    char* arr[] = {"ab","a0","ad","zz", "aa0", "a0b"};
-   
-    int size =5;
-    TokenNode* data = sort(arr, size);
-    int i;
-    TokenNode* ptr = data;
-    for(i=0; i<size; i++){
-        printf("%s\n", ptr->token);
-        ptr = ptr->next;
-    }
-
-    return 0;
-}
 

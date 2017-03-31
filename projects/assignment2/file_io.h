@@ -22,7 +22,7 @@ typedef struct tokens{
     int tok_amount;
 }TokenData;
 
-static void file_system_waltz(const char* dir_name);
+void file_system_waltz(const char* dir_name);
 
 void onLoadUp(int argc, char** argv);
 

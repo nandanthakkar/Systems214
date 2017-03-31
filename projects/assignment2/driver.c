@@ -1,9 +1,12 @@
-#include <stdio.h>
-#include <stdlib.h>
+#include "file_io.h"
 
 int main(){
     //1. Go through file system
-	//2. Read files from the current directory
+    
+    char* dir;
+    file_system_waltz(dir);
+
+
     //3. Populate hashtable
     //4. Export data to XML
 
