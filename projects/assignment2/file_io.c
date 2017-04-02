@@ -1,40 +1,18 @@
 #include "file_io.h"
 #include "file_hashtable.h"
 
-/*int main(){
-   
-    printf("file size together: %llu\n\n", fsize("./test1.txt")+ fsize("./test2.txt"));
-    
-    char* str = readfile("./test1.txt"); 
-    TokenData* test1 = split(str);
-
-    char* str2 = readfile("./test2.txt");
-    TokenData* test2 = split(str2);
-   
-    TokenData* merge = merge_data(test1, test2);
-    int i;
-    printf("TOKENS:\n");
-    printf("%s\n", merge->unsort_tokens[0]);
-    printf("%s\n", merge->unsort_tokens[1]);
-
-    printf("Token amount: %d\n\n", merge->tok_amount);
-    return 0;
-}*/
-
-
-
-    /*
-     * Purpose: 1. Return a 2D-array of strings that are in the set of Alphanumeric strings.
-     *          - Alphanumeric is defined as a string that is made of characters and numbers
-     *            that MUST START with a alphabetic character.
-     * 
-     * Params: str: The string that will be read
-     *
-     * Return Type: char**: The array of alphanumeric strings
-     *
-     * Example: "hello, $my*name 1s albert." => "['hello', 'my', 'name', 's', 'albert']"
-     */
-TokenData* split(char* str){
+/*
+ * Purpose: 1. Return a 2D-array of strings that are in the set of Alphanumeric strings.
+ *          - Alphanumeric is defined as a string that is made of characters and numbers
+ *            that MUST START with a alphabetic character.
+ * 
+ * Params: str: The string that will be read
+ *
+ * Return Type: char**: The array of alphanumeric strings
+ *
+ * Example: "hello, $my*name 1s albert." => "['hello', 'my', 'name', 's', 'albert']"
+ */
+TokenList* split(char* str){
         
     int inter_tab[strlen(str)][2]; //array of ints that represent the starting and ending points of alphenumerics
     int word_count = 0;//stores how many alphanumerics have been found
@@ -80,6 +58,7 @@ TokenData* split(char* str){
     return create_token_data(alphas ,word_count); //return struct with tokens and amount
 }
 
+//reads data from a file and stores it in a buffer
 char* readfile(char* filepath){
     
     //create file pointer to file
@@ -108,6 +87,7 @@ char* readfile(char* filepath){
     return buffer;
 }
 
+//returns the size of a function
 unsigned long long int fsize(char* filepath){
     
     FILE* fp = fopen(filepath, "r");
@@ -116,28 +96,6 @@ unsigned long long int fsize(char* filepath){
     fseek(fp, 0, SEEK_SET);
     
     return size;
-}
-
-TokenData* merge_data(TokenData* a, TokenData* b){
-    
-    //malloc room for the new token data
-    char** new_toks = (char**) malloc(sizeof(char*)*(a->tok_amount + b->tok_amount));
-    
-    //copy over the old data from TokenData a
-    int offset=0;
-    int i;
-
-    for(i=0; i < a->tok_amount; i++, offset++){
-        new_toks[i] = a->unsort_tokens[i]; 
-    }
-
-    //copy over the old data from TokenData b
-    for(i=0; i < b->tok_amount; i++){
-        new_toks[i+offset] = b->unsort_tokens[i]; 
-    }
-    
-    TokenData* new_data = create_token_data(new_toks, (a->tok_amount + b->tok_amount)); 
-    return new_data;
 }
 
 /* 
@@ -187,7 +145,7 @@ void file_system_waltz(const char* dir_name){
             char* file_str = readfile(file_to_read);
             
             //split the file_str into tokens
-            TokenData* unsorted_tokens = split(file_str);
+            TokenList* unsorted_tokens = split(file_str);
             
             //sort???
 

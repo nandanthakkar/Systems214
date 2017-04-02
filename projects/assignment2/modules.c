@@ -58,7 +58,7 @@ int compare_str(char* a, char* b){
 }
 
 
-TokenNode* sort(TokenData* data, int SIZE){
+TokenNode* sort(TokenList* data, int SIZE){
     char** array = data->unsort_tokens;
     int i=0;
     TokenNode* head = NULL;
@@ -111,7 +111,17 @@ TokenNode* sort(TokenData* data, int SIZE){
     return head;
 }
 
-FileHash* create_filehash(char* filename, TokenData* token_list){
+
+void count_tokens(TokenList* tokens){
+   
+    //first sorts the List of tokens
+    sort(tokens, tokens->tok_amount); 
+
+}
+
+
+//returns a struct pointer of type FileHash that is malloced
+FileHash* create_filehash(char* filename, TokenList* token_list){
     
     FileHash* node = (FileHash*) malloc(sizeof(FileHash));
     node->filename = (char*)malloc(sizeof(char)*(strlen(filename)+1));
@@ -126,9 +136,28 @@ FileHash* create_filehash(char* filename, TokenData* token_list){
     return node;
 }
 
-/* 
- * 
- */
+TokenList* merge_data(TokenList* a, TokenList* b){
+    
+    //malloc room for the new token data
+    char** new_toks = (char**) malloc(sizeof(char*)*(a->tok_amount + b->tok_amount));
+    
+    //copy over the old data from TokenList a
+    int offset=0;
+    int i;
+
+    for(i=0; i < a->tok_amount; i++, offset++){
+        new_toks[i] = a->unsort_tokens[i]; 
+    }
+
+    //copy over the old data from TokenList b
+    for(i=0; i < b->tok_amount; i++){
+        new_toks[i+offset] = b->unsort_tokens[i]; 
+    }
+    
+    TokenList* new_data = create_token_data(new_toks, (a->tok_amount + b->tok_amount)); 
+    return new_data;
+}
+
 
 FileName* create_keyset_elem(char* filename){
    
@@ -160,10 +189,12 @@ TokenNode* create_token_node(char* filename){
     return tok;
 }
 
-TokenData* create_token_data(char** unsort_tokens, int tok_amount){
-   TokenData* tok = (TokenData*) malloc(sizeof(TokenData));
+TokenList* create_token_data(char** unsort_tokens, int tok_amount){
+   TokenList* tok = (TokenList*) malloc(sizeof(TokenList));
 
    tok->unsort_tokens = unsort_tokens;
    tok->tok_amount = tok_amount;
 }
+
+
 

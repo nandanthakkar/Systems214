@@ -1,5 +1,6 @@
 #ifndef HEADER
 #define HEADER
+
 #include <ctype.h>
 #include <sys/stat.h>
 #include <stdio.h>
@@ -13,11 +14,11 @@
 
 #include "globals.h"
 #include "modules.h"
+
 #endif
 
 void file_system_waltz(const char* dir_name);
-TokenData* split(char* str);
+TokenList* split(char* str);
 char* readfile(char* filepath);
 unsigned long long int fsize(char* filepath);
-TokenData* create_token_data(char** unsort_tokens, int tok_amount);
-TokenData* merge_data(TokenData* a, TokenData* b);
+TokenList* create_token_data(char** unsort_tokens, int tok_amount);

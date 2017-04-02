@@ -1,8 +1,13 @@
 #include "file_hashtable.h" 
 
+//initialzies the head ptr for the  keyset to null
 FileName* keyset = NULL;
+
+//global initialization of the file hashtable
 FileHash* file_table[26];
 
+//function to append a filename to they keyset
+//(NOTE*): file names are not sorted alphabetically
 void append_file_to_keyset(char* filename){
     //if empty, add the the first filename
     if(keyset == NULL){
@@ -18,6 +23,7 @@ void append_file_to_keyset(char* filename){
     }
 }
 
+//generates a hash position in my hash table
 int hash_id(char c){
     if(isalpha(c))    
         return (int)(c-'a');
@@ -28,13 +34,13 @@ int hash_id(char c){
 
 /*
  * char** tokens readfile(filename)// read tokens from file
- * TokenData data = create_token_data(token, amount) //store the token into struct
+ * TokenList data = create_token_data(token, amount) //store the token into struct
  * put_filehash(filename) //put data into hashtable
  * extract_data() //loop through keyset and get all nodes
  * write to file
  *
  */
-void put_filehash(char* filename, TokenData* token_list){
+void put_filehash(char* filename, TokenList* token_list){
    
     //check to make sure the filename works
     if(filename == NULL){
