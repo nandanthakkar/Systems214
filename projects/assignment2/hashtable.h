@@ -32,7 +32,15 @@ typedef struct _token_node{
     int count;
 }TokenNode;
 
-static FileName* keyset;
+extern FileName* keyset;
+extern FileHash* file_table[26];
 
-static FileHash* file_table[26];
+int hash_id(char c);
+void append_file_to_keyset(char * filename);
+TokenNode* create_token_node(char* filename);
+FileName* create_keyset_elem(char* filename);
+FileHash* create_filehash(char* filename, TokenData* token_list);
+TokenNode* sort(TokenData* data, int SIZE);
+int compare_str(char* a, char* b);
+void put_filehash(char* filename, TokenData* token_list);
 

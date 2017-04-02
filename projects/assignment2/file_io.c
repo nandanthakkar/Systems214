@@ -1,4 +1,7 @@
+#ifndef HEADER
 #include "file_io.h"
+#include "hashtable.h"
+#endif
 
 /*int main(){
    
@@ -160,17 +163,18 @@ void file_system_waltz(const char* dir_name){
     d = opendir(dir_name);
 
     /* Check it was opened. */
-    if (!d) {
+    if(!d){
         fprintf (stderr, "Cannot open directory '%s': %s\n", dir_name, strerror (errno));
         exit (EXIT_FAILURE);
     }
-    while(true) {
-        struct dirent* entry;
-        const char* d_name;
 
+    while(true){
+        struct dirent* entry;
+        char* d_name;
+     
         // "Readdir" gets subsequent entries from "d".
         entry = readdir(d);
-        if (! entry) {
+        if (!entry) {
             //There are no more entries in this directory, so break
             //out of the while loop. 
             break;
@@ -179,9 +183,7 @@ void file_system_waltz(const char* dir_name){
         d_name = entry->d_name;
         // Print the name of the file and directory. 
         // replace with reading a file
-        if(entry->d_type == DT_REG && entry->d_type != DT_DIR){
-            //printf("%s/%s\n", dir_name, d_name);
-            
+        if(entry->d_type == DT_REG){
             //buffer for path name
             char file_to_read[1024];
 
@@ -190,24 +192,22 @@ void file_system_waltz(const char* dir_name){
             
             //get the file as a string
             char* file_str = readfile(file_to_read);
-            printf("%s\n\n", file_str); 
+            
             //split the file_str into tokens
+            TokenData* unsorted_tokens = split(file_str);
             
             //store tokens in a hashtable
-        
+            put_filehash(d_name, unsorted_tokens); 
         }
-
-
-        if (entry->d_type & DT_DIR) {
-
-            /* Check that the directory is not "d" or d's parent. */
             
+        //if a directory
+        if (entry->d_type & DT_DIR) {
+            // Check that the directory is not "d" or d's parent.
             if (strcmp (d_name, "..") != 0 && strcmp (d_name, ".") != 0) {
                 int path_length;
                 char path[PATH_MAX];
  
-                path_length = snprintf (path, PATH_MAX,
-                                        "%s/%s", dir_name, d_name);
+                path_length = snprintf (path, PATH_MAX,"%s/%s", dir_name, d_name);
                 printf ("%s\n", path);
                 if (path_length >= PATH_MAX) {
                     fprintf (stderr, "Path length has got too long.\n");
@@ -218,6 +218,7 @@ void file_system_waltz(const char* dir_name){
             }
 	    }
     }
+
     /* After going through all the entries, close the directory. */
     if (closedir (d)) {
         fprintf (stderr, "Could not close '%s': %s\n",

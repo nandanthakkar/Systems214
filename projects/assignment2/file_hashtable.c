@@ -1,5 +1,8 @@
 #include "hashtable.h" 
 
+FileName* keyset = NULL;
+FileHash* file_table[26];
+
 FileHash* create_filehash(char* filename, TokenData* token_list){
     
     FileHash* node = (FileHash*) malloc(sizeof(FileHash));
@@ -15,18 +18,22 @@ FileHash* create_filehash(char* filename, TokenData* token_list){
     return node;
 }
 
+/* 
+ * 
+ */
 FileName* create_keyset_elem(char* filename){
    
     //malloc data for the struct as well the as the filname
-    
     FileName* file_node = (FileName*) malloc(sizeof(FileName)); 
     
+    //malloc data for the string
     file_node -> filename = (char*)malloc(sizeof(char)*(strlen(filename)+1));
+    strcpy(file_node->filename, filename);
+   
+    //set the next value in the linked list to null
     file_node->next = NULL; 
-    
-    //copy the string into the struct
-    strcpy(file_node->filename,filename);
 
+    //return the data
     return file_node;
 }
 
@@ -44,53 +51,20 @@ TokenNode* create_token_node(char* filename){
     return tok;
 }
 
-void append_file_to_keyset(char * filename){
+void append_file_to_keyset(char* filename){
     
+
     //if empty, add the the first filename
     if(keyset == NULL){
-        keyset= create_keyset_elem(filename);
-    }  
-    //if the new filename is less than the first filename based on strcmp, add to front
-    else if(strcmp(filename, keyset->filename) < 0){
-        FileName* temp = keyset;
         keyset = create_keyset_elem(filename);
-        keyset->next = temp;
-        
-        return;
     }
-    else if(strcmp(filename, keyset->filename) == 0){
-        return;
-    }
-    //if the new filename is greater than the first filename, append to SECOND element
-    else if(strcmp(filename, keyset->filename) > 0 && keyset->next == NULL){
-        keyset->next = create_keyset_elem(filename); 
-        
-        return;
-    }
+    //else append (we will sort later using another sort function)
     else{
-       
-        FileName* itr;
-        for(itr = keyset; itr->next != NULL; itr = itr->next){
-             
-            //if they are equal, ignore the filename
-            if(strcmp(filename, itr->filename) == 0){
-                return;
-            }
-            
-            //append to middle
-            if(strcmp(filename, itr->filename) > 0 && strcmp(filename, itr->next->filename)<0){
-                FileName* temp = keyset->next;
-                itr = create_keyset_elem(filename);
-                itr->next = temp;
-
-                return;
-            }
-        }
+        FileName* ptr = keyset;
+        for(; ptr->next != NULL; ptr = ptr->next);
         
-        
-        //if made it past the for loop, we must append to the end
-        itr->next = create_keyset_elem(filename);
-        return;
+        //append the new filename
+        ptr->next = create_keyset_elem(filename);
     }
 }
 
@@ -101,7 +75,6 @@ int hash_id(char c){
     perror("The file being inserted doesn't start with a letter");
     exit(EXIT_FAILURE);
 }
-
 
 /*
  * char** tokens readfile(filename)// read tokens from file
@@ -118,13 +91,15 @@ void put_filehash(char* filename, TokenData* token_list){
         perror("put(char* filename, char**tokens)\nFile name was null\n");
         exit(EXIT_FAILURE);
     }
-        
+    
+    //printf("PUT_FILEHASH: %s\n", filename);
+
     //get hash index
     int index = hash_id(filename[0]);
     
     //insert into keyset
-    append_file_to_keyset(filename); 
-
+    append_file_to_keyset(filename);
+   
     //if there are no files added to the index list, add the first
     if(file_table[index] == NULL){
         file_table[index] = create_filehash(filename, token_list);
@@ -137,7 +112,7 @@ void put_filehash(char* filename, TokenData* token_list){
         //checks for all cases in the middle of the list
         for(;ptr->next != NULL; ptr = ptr->next){
            
-            printf("PTR: %s\n", ptr->filename);
+            //printf("PTR: %s\n", ptr->filename);
 
             //put a word in between 2 words based on name 
             if(strcmp(filename, ptr->filename)>0 &&
@@ -276,7 +251,6 @@ TokenNode* sort(TokenData* data, int SIZE){
             else if(ptr->next != NULL && 
                     compare_str(array[i], ptr->token)>0 &&
                     compare_str(array[i], ptr->next->token)<0){
-               
                 
                TokenNode* temp = ptr->next;
                ptr->next = create_token_node(array[i]);
