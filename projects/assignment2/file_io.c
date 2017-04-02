@@ -1,7 +1,5 @@
-#ifndef HEADER
 #include "file_io.h"
-#include "hashtable.h"
-#endif
+#include "file_hashtable.h"
 
 /*int main(){
    
@@ -22,6 +20,8 @@
     printf("Token amount: %d\n\n", merge->tok_amount);
     return 0;
 }*/
+
+
 
     /*
      * Purpose: 1. Return a 2D-array of strings that are in the set of Alphanumeric strings.
@@ -118,13 +118,6 @@ unsigned long long int fsize(char* filepath){
     return size;
 }
 
-TokenData* create_token_data(char** unsort_tokens, int tok_amount){
-   TokenData* tok = (TokenData*) malloc(sizeof(TokenData));
-
-   tok->unsort_tokens = unsort_tokens;
-   tok->tok_amount = tok_amount;
-}
-
 TokenData* merge_data(TokenData* a, TokenData* b){
     
     //malloc room for the new token data
@@ -196,6 +189,8 @@ void file_system_waltz(const char* dir_name){
             //split the file_str into tokens
             TokenData* unsorted_tokens = split(file_str);
             
+            //sort???
+
             //store tokens in a hashtable
             put_filehash(d_name, unsorted_tokens); 
         }
@@ -226,44 +221,3 @@ void file_system_waltz(const char* dir_name){
         exit (EXIT_FAILURE);
     }
 }
-
-/*
- * Purpose: Handles what the program should do on load up 
- *
- * Params: 1. argc:   Argument count that is sent was from main
- *         2. argv**: The actual arguments that were typed in on the command line 
- *                    when running the program
- *
- * Return Type: void
- */
-void onLoadUp(int argc, char** argv){
-    
-    //warn the user there aren't enough arguments
-    if(argc <=2){
-        perror("ERROR: Not enough arguments on startup.");
-    }
-    
-    //if there are the correct amount of arguments
-    else if(argc == 3){
-       
-        //store a global instance of a the current working directory
-        //store_cwd(); 
-        printf("CWD: %s\n", CWD);
-
-        //store a global instance of the inverted-index filename 
-        //store_inverted_index_filename(argv[1]);
-        printf("XML_FILE: %s\n", XML_FILE_NAME); 
-             
-        //store a global instance of the folder or file we are traversing through
-        //store_root_descriptor(argv[2]);   
-        printf("ROOT_DES: %s\n", ROOT_DESCRIP);
-
-    }
-
-    //otherwise there are too many arguments
-    else{
-        perror("ERROR: Too many arguments on startup.");
-    }
-        
-}
-

@@ -12,28 +12,12 @@
 #include <limits.h>
 
 #include "globals.h"
+#include "modules.h"
 #endif
 
-//boolean types
-typedef enum _bool{false, true} bool;
-
-typedef struct tokens{
-    char** unsort_tokens;
-    int tok_amount;
-}TokenData;
-
 void file_system_waltz(const char* dir_name);
-
-void onLoadUp(int argc, char** argv);
-
 TokenData* split(char* str);
-
 char* readfile(char* filepath);
-
 unsigned long long int fsize(char* filepath);
-
 TokenData* create_token_data(char** unsort_tokens, int tok_amount);
-
 TokenData* merge_data(TokenData* a, TokenData* b);
-
-
