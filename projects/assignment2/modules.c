@@ -57,14 +57,15 @@ int compare_str(char* a, char* b){
     return weight;
 }
 
-
-TokenNode* sort(TokenList* data, int SIZE){
+//sorts the files and gets the amount of occurrences of each word
+TokenNode* sort(TokenList* data, int SIZE, char* filename){
     char** array = data->unsort_tokens;
     int i=0;
     TokenNode* head = NULL;
     
+    //token, frequency, filename
     //link the first string into the list
-    head = create_token_node(array[i]);
+    head = create_token_node(array[i], 1, filename);
     i++;
 
     //link the second element
@@ -79,7 +80,7 @@ TokenNode* sort(TokenList* data, int SIZE){
                 compare_str(array[i], ptr->token) < 0){
                 
                 TokenNode* temp = head;
-                head = create_token_node(array[i]);
+                head = create_token_node(array[i], 1, filename);
                 head->next = temp;
                 ptr = ptr->next;
             }            
@@ -88,12 +89,12 @@ TokenNode* sort(TokenList* data, int SIZE){
             else if(compare_str(array[i], ptr->token)==0 && 
                     strlen(array[i]) == strlen(ptr->token)){
                 
-                ptr->count++;
+                ptr->token_frequency++;
             }
             
             //if we are at the end and we want to append to the end of the list
             else if(ptr->next == NULL && compare_str(array[i], ptr->token)>0){
-                ptr->next = create_token_node(array[i]);
+                ptr->next = create_token_node(array[i], 1, filename);
                 ptr = ptr->next;
             }
             else if(ptr->next != NULL && 
@@ -101,24 +102,16 @@ TokenNode* sort(TokenList* data, int SIZE){
                     compare_str(array[i], ptr->next->token)<0){
                 
                TokenNode* temp = ptr->next;
-               ptr->next = create_token_node(array[i]);
+               ptr->next = create_token_node(array[i], 1, filename);
                ptr->next->next = temp;
                ptr = ptr->next->next;
             }
         }
     }
-
+    
+    //return a linked list of nodes that have the proper count and are sorted
     return head;
 }
-
-
-void count_tokens(TokenList* tokens){
-   
-    //first sorts the List of tokens
-    sort(tokens, tokens->tok_amount); 
-
-}
-
 
 //returns a struct pointer of type FileHash that is malloced
 FileHash* create_filehash(char* filename, TokenList* token_list){
@@ -175,25 +168,33 @@ FileName* create_keyset_elem(char* filename){
     return file_node;
 }
 
-TokenNode* create_token_node(char* filename){
+TokenNode* create_token_node(char* token, int token_freq, char* filename){
     
-    //create token
+    //malloc room for token
     TokenNode* tok = (TokenNode*) malloc(sizeof(TokenNode));
-    
-    //store string
-    tok->token = (char*)malloc(sizeof(strlen(filename)+1));
-    strcpy(tok->token, filename);
-    
-    tok->count = 1;
+
+    tok->token = (char*) malloc(sizeof(char)*strlen(token));
+    strcpy(tok->token, token);
+
+    //store the token frequency
+    tok->token_frequency = token_freq;
+
+    //store the filename
+    tok->filename = (char*)malloc(sizeof(strlen(filename)+1));
+    strcpy(tok->filename, filename);
 
     return tok;
 }
 
 TokenList* create_token_data(char** unsort_tokens, int tok_amount){
-   TokenList* tok = (TokenList*) malloc(sizeof(TokenList));
+    TokenList* tok = (TokenList*) malloc(sizeof(TokenList));
+    
+    //store a reference to the unsorted token list
+    tok->unsort_tokens = unsort_tokens;
+    //store the amount of tokens from the file
+    tok->tok_amount = tok_amount;
 
-   tok->unsort_tokens = unsort_tokens;
-   tok->tok_amount = tok_amount;
+    return tok;
 }
 
 

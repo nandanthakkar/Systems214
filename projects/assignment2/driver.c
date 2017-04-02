@@ -15,6 +15,10 @@ int main(){
     FileName* ptr;
     for(ptr = keyset; ptr!=NULL; ptr=ptr->next){
         printf("Filename: %s\n", ptr->filename);
+
+        //TokenNode = sorted the tokenlist
+        //for loop over token Nodes
+        //  hash token nodes
     }   
 
     //4. Export data to XML

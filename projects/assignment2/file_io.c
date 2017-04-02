@@ -146,8 +146,6 @@ void file_system_waltz(const char* dir_name){
             
             //split the file_str into tokens
             TokenList* unsorted_tokens = split(file_str);
-            
-            //sort???
 
             //store tokens in a hashtable
             put_filehash(d_name, unsorted_tokens); 
