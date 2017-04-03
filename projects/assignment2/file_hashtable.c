@@ -71,8 +71,8 @@ void put_filehash(char* filename, TokenList* token_list){
             //printf("PTR: %s\n", ptr->filename);
 
             //put a word in between 2 words based on name 
-            if(strcmp(filename, ptr->filename)>0 &&
-               strcmp(filename, ptr->next->filename)<0){
+            if(compare_str(filename, ptr->filename)>0 &&
+               compare_str(filename, ptr->next->filename)<0){
                 
                 FileHash* temp = ptr->next;
                 ptr->next = create_filehash(filename, token_list);

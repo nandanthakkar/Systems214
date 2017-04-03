@@ -55,5 +55,3 @@ TokenNode* create_token_node(char* token, int token_freq, char* filename);
 FileName* create_keyset_elem(char* filename);
 FileHash* create_filehash(char* filename, TokenList* token_list);
 TokenList* create_token_data(char** unsort_tokens, int tok_amount);
-
-

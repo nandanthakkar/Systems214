@@ -12,15 +12,22 @@ int main(){
     file_system_waltz("./test_files");
 
     //loop over the keyset and get the data with the tokens 
-    FileName* ptr;
-    for(ptr = keyset; ptr!=NULL; ptr=ptr->next){
-        printf("Filename: %s\n", ptr->filename);
+    FileHash* ptr;
+    int i = -1;
+    //loop over the entire alphabet
+    for(i = 0; i<26; i++){
+        for(ptr = file_table[i] ; ptr!=NULL; ptr=ptr->next){
+            //linked list of tokens
+            TokenNode* token_head = sort(ptr->tokens, ptr->tokens->tok_amount, ptr->filename);
 
-        //TokenNode = sorted the tokenlist
-        //for loop over token Nodes
-        //  hash token nodes
-    }   
+            printf("Tokens: %s, %d, %s\n", token_head->token, token_head->token_frequency, token_head->filename); 
+            
 
+
+            //for loop over token Nodes
+            //  hash token nodes
+        }   
+    }
     //4. Export data to XML
 
 	return 0;
