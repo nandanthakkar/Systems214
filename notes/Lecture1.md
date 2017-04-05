@@ -14,7 +14,7 @@ typedef struct Thing{
 
 /*
  *Short Hand Declaration
- *(the struct must be declared)
+ *(the struct must be initialized)
  */
 Thing t = {2,'c'};
 
