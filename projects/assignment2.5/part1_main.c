@@ -3,10 +3,10 @@
 #include "part1_functions.h"
 
 int main(){
-  /*printf("== one() ==\n");
+  printf("== one() ==\n");
   one(3, 4);
   one(10, 10);
-
+  
   printf("== two() ==\n");
   const char *a = "20";
   two(a);
@@ -62,7 +62,7 @@ int main(){
 
   printf("== twelve() ==\n");
   twelve();
-  */
+
   printf("== thirteen() ==\n");
   thirteen(10);
 
@@ -90,13 +90,12 @@ int main(){
   eighteen(3);
   eighteen(5);
 
-
+/*
   printf("== clear_bits() ==\n");
   long int result;
 
   result = clear_bits(0xFF, 0x55);
   printf("%ld\n", result);
-/*
   result = clear_bits(0x00, 0xF0);
   printf("%ld\n", result);
 

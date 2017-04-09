@@ -14,7 +14,7 @@
  */
 void one(const int a, const int b) {
   int c = (a * a) + (b * b);
-  printf("%d^2 + %d^2 = %d", a, b, c);
+  printf("%d^2 + %d^2 = %d\n", a, b, c);
 }
 
 /**
@@ -25,20 +25,17 @@ void one(const int a, const int b) {
  *     The grade to check.
  */
 void two(const char *grade) {
-  // you may find the atoi function useful
-  if (*grade > 70)
-    printf("%d passed!\n", grade);
+  if (atoi(grade) > 70)
+    printf("%s passed!\n", grade);
   else
-    printf("%d not passed!\n", grade);
+    printf("%s not passed!\n", grade);
 }
-
 /**
  * Assigns a pointer (int *p) the value of a stack variable (int x).
  */
 void three() {
   int x = 4;
   int *p = &x;
-
   printf("The value of p is: %d\n", *p);
 }
 
@@ -50,7 +47,7 @@ void three() {
  *     Value to test.
  */
 void four(const float value) {
-  if (0 < value < 1)
+  if ((value > 0) &&  (value < 1))
     printf("The value is between zero and one.\n");
   else
     printf("The value is not between zero and one.\n");
@@ -67,7 +64,7 @@ void four(const float value) {
  *     Second input parameter.
  */
 void five(const int *x, const int *y) {
-  if (x == y)
+  if (*x == *y)
     printf("x and y are equal.\n");
   else
     printf("x and y are different.\n");
@@ -85,9 +82,9 @@ void five(const int *x, const int *y) {
  *     contains the value of the input parameter.
  */
 float *six(const int *x) {
-  const int* p = x;
-  float* temp = ((float*)(p));
-  return temp;
+  float *p = malloc(sizeof(float));
+  *p = *x;
+  return p;
 }
 
 /**
@@ -99,7 +96,7 @@ float *six(const int *x) {
  *
  */
 void seven(const char *a) {
-  if (*a >= 'A' && *a <= 'z')
+  if ((*a >= 'A' && *a <= 'Z') || (*a >= 'a' && *a <= 'z'))
     printf("a is a letter.\n");
   else
     printf("a is not a letter.\n");
@@ -110,7 +107,7 @@ void seven(const char *a) {
  * string "Hello".
  */
 void eight() {
-  char *s = malloc(5);
+  char *s = malloc(6);
 
   s[0] = 'H';
   s[1] = 'e';
@@ -127,10 +124,10 @@ void eight() {
  * Assigns a pointer (float *p) a numeric value (12.5).
  */
 void nine() {
-  float p;
-  p = 12.5;
-
-  printf("The value of p is: %f\n", p);
+  float *p = malloc(sizeof(float));
+  *p = 12.5;
+  printf("The value of p is: %f\n", *p);
+  free(p);
 }
 
 /**
@@ -139,25 +136,30 @@ void nine() {
  * @param x
  *     Pointer to reset to 0.
  */
-void ten(int *x) { x = 0; }
+void ten(int *x) { 
+  *x = 0; 
+}
 
 /**
  * Concatenates "Hello " and the parameter str, which is guaranteed to be a
  * valid c string, and
  * prints the concatenated string.
  */
+
 void eleven(const char *str) {
-  char *s = "Hello ";
+  char *s = malloc(13);
+  //char *s = "Hello";
+  strcpy(s, "Hello ");
   strcat(s, str);
   printf("%s\n", s);
+  free(s);
 }
 
 /**
  * Creates an array of values containing the values {0.0, 0.1, ..., 0.9}.
  */
 void twelve() {
-  float *values;
-
+  float *values = malloc(10*sizeof(float));
   int i, n = 10;
   for (i = 0; i < n; i++)
     values[i] = (float)i / n;
@@ -165,6 +167,7 @@ void twelve() {
   for (i = 0; i < n; i++)
     printf("%f ", values[i]);
   printf("\n");
+  free(values);
 }
 
 /**
@@ -291,6 +294,9 @@ void eighteen(const int k) {
  *     The flag (or mask) used in order to clear bits from "value".
  */
 long int clear_bits(long int value, long int flag) {
-  // TODO clear_bits
+
+    long int result=-1;
+    
+
 }
 
