@@ -1,3 +1,11 @@
+/**
+ * AUTHOR: Douglas Rudolph
+ * COURSE: Systems Programming - 214
+ * PROFESSOR: Dr. Fransisco
+ * DUE DATE: April 9th, 2017
+ *
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
