@@ -13,8 +13,8 @@ typedef struct Thing{
 }
 
 /*
- *Short Hand Declaration
- *(the struct must be declared)
+ *Short Hand Initialization
+ *(the struct must be declaration)
  */
 Thing t = {2,'c'};
 
