@@ -16,7 +16,8 @@ int main(){
     int i = -1;
     //loop over the entire alphabet
     for(i = 0; i<26; i++){
-        for(ptr = file_table[i] ; ptr!=NULL; ptr=ptr->next){
+
+        for(ptr = file_table[i]; ptr!=NULL; ptr=ptr->next){
             //linked list of tokens
             TokenNode* token_head = sort(ptr->tokens, ptr->tokens->tok_amount, ptr->filename);
 
