@@ -115,7 +115,7 @@ void seven(const char *a) {
  * string "Hello".
  */
 void eight() {
-  char *s = malloc(6);
+  char *s = malloc(sizeof(char)*6);
 
   s[0] = 'H';
   s[1] = 'e';
@@ -155,8 +155,7 @@ void ten(int *x) {
  */
 
 void eleven(const char *str) {
-  char *s = malloc(13);
-  //char *s = "Hello";
+  char *s = malloc(sizeof(char)*(strlen(str)+1));
   strcpy(s, "Hello ");
   strcat(s, str);
   printf("%s\n", s);
