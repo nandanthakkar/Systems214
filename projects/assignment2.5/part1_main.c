@@ -90,7 +90,6 @@ int main(){
   eighteen(3);
   eighteen(5);
 
-/*
   printf("== clear_bits() ==\n");
   long int result;
 
@@ -109,8 +108,7 @@ int main(){
   printf("%ld\n", result);
 
   result = clear_bits(0xBB, 0xBB);
-  printf("%ld\n", result);*/
-
+  printf("%ld\n", result);
 
   return 0;
 }
