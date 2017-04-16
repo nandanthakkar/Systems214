@@ -1,45 +1,57 @@
 #include "token_hashtable.h"
 
 void put_tokenhash(TokenNode* hash){
-        
-    TokenNode* ptr = head;
-    for( ;ptr != NULL; ptr = ptr->next){
-        
-        //should come before the beginnnig of the list
-        if(ptr != NULL && ptr == head && 
-           /*compare_str(array[i], ptr->token) < 0)*/{
-            
-            TokenNode* temp = head;
-            //head = create_token_node(array[i], 1, filename);
-            head->next = temp;
-            ptr = ptr->next;
-        }            
+    
+    //breaks program in case there is an error
+    if(hash != NULL){
+        perror("put_filehash(char* filename, char**tokens)\nFile name was null\n");
+        exit(EXIT_FAILURE);
+    }
 
-        //if they are the same string
-        else if(compare_str(array[i], ptr->token)==0 && 
-                strlen(array[i]) == strlen(ptr->token)){
-            
-            ptr->token_frequency++;
-        }
+    //position we are going to write
+    int index = hash_id(hash->token[0]);
+    
+    //if there are no files added to the token_table
+    //ADDS TO THE BEGINNING OF A LIST
+    if(token_table[index] == NULL){
+        token_table[index] = hash;
+    }
+    else{
+        TokenNode* ptr=NULL;
         
-        //if we are at the end and we want to append to the end of the list
-        else if(ptr->next == NULL && compare_str(array[i], ptr->token)>0){
-            //ptr->next = create_token_node(array[i], 1, filename);
-            ptr = ptr->next;
-        }
-
-        else if(ptr->next != NULL && 
-                compare_str(array[i], ptr->token)>0 &&
-                compare_str(array[i], ptr->next->token)<0){
+        for(ptr = token_table[index]; ptr != NULL; ptr = ptr->next){
             
-           TokenNode* temp = ptr->next;
-           //ptr->next = create_token_node(array[i], 1, filename);
-           ptr->next->next = temp;
-           ptr = ptr->next->next;
+            //If they have the same token, compare frequency, 
+            //  if the frequency of the new token is greater, add to front
+            //  if the frequency of the new token is less, to back
+            //  if the frequency of the new token is the same, append based on alphanumerics
+            if(compare_str(hash->token, ptr->token) == 0){
+                          
+            }
+            
+            // 
+            else if(ptr->next != NULL && 
+                    compare_str(hash->token, ptr->next->token) < 0 &&
+                    compare_str(hash->token, ptr->token)>0){
+                
+                /*
+                 * a -> b ->
+                 * temp = b
+                 * 
+                 *
+                 */
+                TokenNode* temp = ptr->next;
+                ptr->next = hash;
+                ptr->next->next = temp;
+                ptr = temp;
+            }
+            
+            //
+            else if(compare_str(hash->token, ptr->token) > 0){
+                
+            }
         }
     }
 
-//return a linked list of nodes that have the proper count and are sorted
-return head;
+    
 }
-

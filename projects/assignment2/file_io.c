@@ -132,8 +132,6 @@ void file_system_waltz(const char* dir_name){
         }
         
         d_name = entry->d_name;
-        // Print the name of the file and directory. 
-        // replace with reading a file
         if(entry->d_type == DT_REG){
             //buffer for path name
             char file_to_read[1024];
@@ -141,7 +139,7 @@ void file_system_waltz(const char* dir_name){
             //get the path to the filename as a string
             sprintf(file_to_read,"%s/%s", dir_name, d_name);
             
-            //get the file as a string
+            //get the file content as a string
             char* file_str = readfile(file_to_read);
             
             //split the file_str into tokens

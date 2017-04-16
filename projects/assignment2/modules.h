@@ -3,7 +3,6 @@
 
 #include <string.h>
 #include <ctype.h>
-
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -38,7 +37,8 @@ typedef struct _filename{
     struct _filename* next; 
 }FileName;
 
-
+//generates a hash position in my hash table
+int hash_id(char c);
 
 //function that compares if a string is larger based on the alphanumeric value
 int compare_str(char* a, char* b);

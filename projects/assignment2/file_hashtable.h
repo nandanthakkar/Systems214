@@ -22,6 +22,5 @@ extern FileName* keyset;
 extern FileHash* file_table[26];
 
 //File Hashtable functions
-int hash_id(char c);
 void append_file_to_keyset(char * filename);
 void put_filehash(char* filename, TokenList* token_list);

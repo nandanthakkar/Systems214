@@ -14,21 +14,16 @@ int main(){
     //loop over the keyset and get the data with the tokens 
     FileHash* ptr;
     int i = -1;
+
     //loop over the entire alphabet
-    for(i = 0; i<26; i++){
-
+    for(i = 0; i < 26; i++){
+        //loop through linked list
         for(ptr = file_table[i]; ptr!=NULL; ptr=ptr->next){
-            //linked list of tokens
             TokenNode* token_head = sort(ptr->tokens, ptr->tokens->tok_amount, ptr->filename);
-
             printf("Tokens: %s, %d, %s\n", token_head->token, token_head->token_frequency, token_head->filename); 
-            
-
-
-            //for loop over token Nodes
-            //  hash token nodes
         }   
     }
+
     //4. Export data to XML
 
 	return 0;

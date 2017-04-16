@@ -23,15 +23,6 @@ void append_file_to_keyset(char* filename){
     }
 }
 
-//generates a hash position in my hash table
-int hash_id(char c){
-    if(isalpha(c))    
-        return (int)(c-'a');
-    
-    perror("The file being inserted doesn't start with a letter");
-    exit(EXIT_FAILURE);
-}
-
 /*
  * char** tokens readfile(filename)// read tokens from file
  * TokenList data = create_token_data(token, amount) //store the token into struct
@@ -44,7 +35,7 @@ void put_filehash(char* filename, TokenList* token_list){
    
     //check to make sure the filename works
     if(filename == NULL){
-        perror("put(char* filename, char**tokens)\nFile name was null\n");
+        perror("put_filehash(char* filename, char**tokens)\nFile name was null\n");
         exit(EXIT_FAILURE);
     }
     
@@ -82,7 +73,7 @@ void put_filehash(char* filename, TokenList* token_list){
             }
 
             //merge tokens if the files share the same name
-            else if(strcmp(filename, ptr->filename) == 0){
+            else if(compare_str(filename, ptr->filename) == 0){
                 FileHash* temp = create_filehash(filename, token_list);
                 ptr->tokens = merge_data(temp->tokens, ptr->tokens);
                 return;
@@ -90,17 +81,19 @@ void put_filehash(char* filename, TokenList* token_list){
         }
         
         //insert second node
-        if(strcmp(filename, file_table[index]->filename) == 0){
+        if(compare_str(filename, file_table[index]->filename) == 0){
             //merge the data
             FileHash* temp = create_filehash(filename, token_list);
             file_table[index]->tokens = merge_data(temp->tokens, file_table[index]->tokens);
         }
-        else if(strcmp(file_table[index]->filename, filename) > 0){
+
+        else if(compare_str(file_table[index]->filename, filename) > 0){
             FileHash* temp = file_table[index];
             file_table[index] = create_filehash(filename, token_list);
             file_table[index] -> next = temp;
         }
-        else if(strcmp(file_table[0]->filename, filename) < 0){
+
+        else if(compare_str(file_table[0]->filename, filename) < 0){
             file_table[index]->next = create_filehash(filename, token_list);
         }
 

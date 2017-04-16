@@ -1,5 +1,14 @@
 #include "modules.h"
 
+//generates a hash position in my hash table
+int hash_id(char c){
+    if(isalpha(c))    
+        return (int)(c-'a');
+    
+    perror("The file being inserted doesn't start with a letter");
+    exit(EXIT_FAILURE);
+}
+
 int compare_str(char* a, char* b){
    
     int size_a = strlen(a);

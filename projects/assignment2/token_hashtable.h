@@ -10,5 +10,6 @@
 
 #endif
 
+TokenNode* token_table[26];
 void put_tokenhash(TokenNode* hash);
 
