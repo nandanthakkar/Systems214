@@ -12,7 +12,7 @@
 typedef enum _bool{false, true} bool;
 
 //Used right after splitting data from a file
-typedef struct _TokenData{
+typedef struct _TokenList{
     char** unsort_tokens;
     int tok_amount;
 }TokenList;

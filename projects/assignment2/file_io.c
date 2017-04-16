@@ -13,7 +13,11 @@
  * Example: "hello, $my*name 1s albert." => "['hello', 'my', 'name', 's', 'albert']"
  */
 TokenList* split(char* str){
-        
+    
+    if(str == NULL){
+        printf("STRING IS NULL:");
+        exit(EXIT_FAILURE);
+    }
     int inter_tab[strlen(str)][2]; //array of ints that represent the starting and ending points of alphenumerics
     int word_count = 0;//stores how many alphanumerics have been found
 

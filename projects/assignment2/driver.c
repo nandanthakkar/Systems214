@@ -1,6 +1,7 @@
 #ifndef HEADER
 #include "file_io.h"
 #include "file_hashtable.h"
+#include "token_hashtable.h"
 #endif
 
 int main(){
@@ -17,10 +18,12 @@ int main(){
 
     //loop over the entire alphabet
     for(i = 0; i < 26; i++){
-        //loop through linked list
+        //loop through the file table linked list
         for(ptr = file_table[i]; ptr!=NULL; ptr=ptr->next){
             TokenNode* token_head = sort(ptr->tokens, ptr->tokens->tok_amount, ptr->filename);
             printf("Tokens: %s, %d, %s\n", token_head->token, token_head->token_frequency, token_head->filename); 
+            
+            
         }   
     }
 
