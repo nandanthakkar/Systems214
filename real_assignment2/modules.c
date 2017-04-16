@@ -1,6 +1,33 @@
 #include "modules.h"
 
-TokenList* create_token_list(int tok_amount, char** unsort_tokens, char* filename){
+HashToken* createHashToken(char* token, char* filename){
+    HashToken* HT = (HashToken*) malloc(sizeof(HashToken));
+
+    HT->token = (char*)malloc((sizeof(char)*strlen(token) + 1));
+    
+    HT->head_fd = createFileData(token, filename, 1);
+    HT->next = NULL;
+
+    return HT;
+}
+
+FileData* createFileData(char* token, char* filename, int token_count){
+
+    FileData* FD = (FileData*)malloc(sizeof(FileData));
+
+    FD->token = (char*)malloc((sizeof(char) * strlen(token)+1));
+    strcpy(FD->token, token);
+
+    FD->filename = (char*)malloc( (sizeof(char) * strlen(filename)+1));
+    strcpy(FD->filename, filename);
+
+    FD->token_count = token_count;
+    FD->next_fd=NULL;
+
+    return FD;
+}
+
+TokenList* createTokenList(int tok_amount, char** unsort_tokens, char* filename){
     TokenList* newTL = (TokenList*)malloc(sizeof(TokenList));
     newTL->tok_amount = tok_amount;
     newTL->unsort_tokens = unsort_tokens;
@@ -112,7 +139,7 @@ TokenList* split(char* str, char* filename){
         //printf("%.*s\n", interval, str + inter_tab[i][0]);//test purposes
     }
     
-    return create_token_list(word_count, alphas, filename); //return struct with tokens and amount
+    return createTokenList(word_count, alphas, filename); //return struct with tokens and amount
 }
 
 //returns the size of a function
@@ -155,3 +182,11 @@ char* readfile(char* filepath){
     return buffer;
 }
 
+//generates a hash position in my hash table
+int hashId(char c){
+    if(isalpha(c))    
+        return (int)(c-'a');
+    
+    perror("The file being inserted doesn't start with a letter");
+    exit(EXIT_FAILURE);
+}
