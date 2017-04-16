@@ -29,20 +29,16 @@ typedef struct _TokenList{
     char* filename;
 }TokenList;
 
-
-
+// create functions
 HashToken* createHashToken(char* token, char* filename);
 
 FileData* createFileData(char* token, char* filename, int token_count);
 
 TokenList* createTokenList(int tok_amount, char** unsort_tokens, char* filename);
 
+//helper functions
 int compare_str(char* a, char* b);
-
 TokenList* split(char* str, char* filename);
-
 unsigned long long int fsize(char* filepath);
-
 char* readfile(char* filepath);
-
 int hashId(char c);

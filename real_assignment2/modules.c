@@ -4,7 +4,8 @@ HashToken* createHashToken(char* token, char* filename){
     HashToken* HT = (HashToken*) malloc(sizeof(HashToken));
 
     HT->token = (char*)malloc((sizeof(char)*strlen(token) + 1));
-    
+    strcpy(HT->token, token);
+
     HT->head_fd = createFileData(token, filename, 1);
     HT->next = NULL;
 
@@ -29,6 +30,7 @@ FileData* createFileData(char* token, char* filename, int token_count){
 
 TokenList* createTokenList(int tok_amount, char** unsort_tokens, char* filename){
     TokenList* newTL = (TokenList*)malloc(sizeof(TokenList));
+    
     newTL->tok_amount = tok_amount;
     newTL->unsort_tokens = unsort_tokens;
     
