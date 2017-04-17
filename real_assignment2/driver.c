@@ -33,6 +33,7 @@ FileData* sortFileData(FileData* head){
 
         else if(newHead->token_count == ptr->token_count && 
                 compare_str(ptr->filename, newHead->filename) < 0){
+                
             FileData* temp = newHead; //store a reference to newHead
             newHead = ptr; //make newHead equal to the new larger ptr
             ptr = ptr->next_fd;//make ptr move forward
@@ -95,20 +96,10 @@ FileData* sortFileData(FileData* head){
 //main method
 int main(int argc, char** argv){
     
-    FileData* one = createFileData("banana", "can", 11);
-    FileData* two = createFileData("banana", "coo", 5);
-    FileData* three = createFileData("banana", "coe", 5);
-    FileData* four = createFileData("banana", "cap", 5);
-    FileData* five = createFileData("banana", "code", 5);
-    FileData* six = createFileData("banana", "con", 5);
-    FileData* seven = createFileData("banana", "coool", 5);
+    FileData* one = createFileData("banana", "coo", 5);
+    FileData* two = createFileData("banana", "can", 5);
 
     one->next_fd = two;
-    two->next_fd = three;
-    three->next_fd = four;
-    four->next_fd = five;
-    five->next_fd = six;
-    six->next_fd = seven;
 
     printf("BEFORE:\n");
     FileData* itr;
