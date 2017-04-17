@@ -325,3 +325,80 @@ void printTokenTable(){
         }
     }
 }
+
+void listdir(const char *name, int level){
+    DIR *dir;
+    struct dirent *entry;
+
+    if(!(dir = opendir(name)))
+        return;
+    if(!(entry = readdir(dir)))
+        return;
+
+    do{
+        //if the FD is a directory, recurse
+        if(entry->d_type == DT_DIR){
+            char path[1024];
+            int len = snprintf(path, sizeof(path)-1, "%s/%s", name, entry->d_name);
+            path[len] = 0;
+            
+            if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0)
+                continue;
+
+            //printf("%*s[%s]\n", level*2, "", entry->d_name);
+            listdir(path, level + 1);
+        }
+        //else if it is a file
+        else{
+            //create full path to file to be read
+            char path[1024];
+            int len = snprintf(path, sizeof(path)-1, "%s/%s", name, entry->d_name);
+            path[len] = 0;
+            
+            //read and get it as a string
+            char* fileTokens = readfile(path);
+
+            //get all the tokens as a list and store the filename
+            TokenList* tokenList = split(fileTokens, entry->d_name);
+
+            int amount = tokenList->tok_amount;
+            char* filename = tokenList->filename;
+
+            int i;
+            for(i=0; i<amount; i++){
+                char* token = tokenList->unsort_tokens[i];
+                addToken(token, filename);        
+            }
+            //printf("%*s- %s\n", level*2, "", entry->d_name);//prints for testing purposes
+        }
+    } while(entry = readdir(dir));
+    closedir(dir);
+}
+
+void writeToXML(){
+    
+    printf("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+    printf("<fileIndex>\n"); 
+    
+    //loop through alphabet
+    int i = -1;
+    for(i=0; i<26; i++){ 
+        //loop through tokens in hashtable
+        HashToken* itr = NULL;
+        for(itr = token_table[i]; itr!=NULL; itr=itr->next){
+            //loop through files in each token
+            
+            printf("\t<word text=\"%s\">\n", itr->token); 
+            
+            FileData* ptr = NULL;
+            int count=0;
+            
+            for(ptr=itr->head_fd; ptr!=NULL; ptr=ptr->next_fd, count++){
+                printf("\t\t<file name=\"%s\">%d</file>\n",ptr->filename, ptr->token_count);
+            }
+            printf("\t</word>\n");
+        }
+    }
+
+    printf("</fileIndex>");
+}

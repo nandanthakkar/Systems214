@@ -2,6 +2,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <dirent.h>
 
 //boolean type
 typedef enum bool{false, true}bool;
@@ -45,3 +48,5 @@ char* readfile(char* filepath);
 int hashId(char c);
 void addToken(char* token, char* filename);
 void printTokenTable();
+void listdir(const char *name, int level);
+void writeToXML();
