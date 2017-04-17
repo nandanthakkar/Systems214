@@ -29,11 +29,12 @@ typedef struct _TokenList{
     char* filename;
 }TokenList;
 
+//token hashtable
+HashToken* token_table[26];
+
 // create functions
 HashToken* createHashToken(char* token, char* filename);
-
 FileData* createFileData(char* token, char* filename, int token_count);
-
 TokenList* createTokenList(int tok_amount, char** unsort_tokens, char* filename);
 
 //helper functions
@@ -42,3 +43,5 @@ TokenList* split(char* str, char* filename);
 unsigned long long int fsize(char* filepath);
 char* readfile(char* filepath);
 int hashId(char c);
+void addToken(char* token, char* filename);
+void printTokenTable();
