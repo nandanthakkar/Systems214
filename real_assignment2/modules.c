@@ -91,6 +91,11 @@ int compare_str(char* a, char* b){
     if(same_prefix==true && size_a > size_b){
         return 1;
     } 
+    else if(same_prefix==true && size_a < size_b){
+        return -1;
+    } 
+
+    return weight;
 }
 
 //get tokens out of string (string comes from a file)
