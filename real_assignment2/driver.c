@@ -72,7 +72,6 @@ void addToken(char* token, char* filename){
                     
                     //if we get to the last position, append to the end and return
                     else if(itr->next_fd == NULL){
-                        printf("MADE IT");
                         itr->next_fd = createFileData(token, filename, 1);
                         return;
                     }
@@ -125,7 +124,7 @@ int main(){
 
     int amount = tokenList->tok_amount;
     char* filename = tokenList->filename;
-    printf("Token Amount:%d, fileame:%s\n", amount, filename); 
+    printf("Token Amount:%d, Filename:%s\n", amount, filename); 
 
     int i;
     for(i=0; i<amount; i++){

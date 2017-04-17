@@ -136,7 +136,24 @@ TokenList* split(char* str, char* filename){
     for(i=0; i<word_count; i++){
         int interval = inter_tab[i][1]-inter_tab[i][0]; // get the size of the interval
         alphas[i] = (char*) malloc(sizeof(char)*interval+1);  //malloc the room for the string plus character for the null char
-        sprintf(alphas[i],"%.*s", interval, str + inter_tab[i][0]); //write the string to the alpha array
+        
+        //set the temp string buffer to all nulls
+        char temp[interval+1];
+        int j;
+        for(j=0; j< interval+1; j++)
+            temp[j]='\0';
+        
+        sprintf(temp,"%.*s", interval, str + inter_tab[i][0]); //write the string to temp buffer
+        
+        //make all the characters in the string lowercase
+        int l;
+        for(l=0; l<strlen(temp); l++){
+            temp[l] = tolower(temp[l]);    
+        }
+        
+        //copy the lowercase string into the array
+        strcpy(alphas[i], temp);
+
         //printf("%s\n",alphas[i]); //print it for testing purposes
         //printf("%.*s\n", interval, str + inter_tab[i][0]);//test purposes
     }
