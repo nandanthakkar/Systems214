@@ -151,6 +151,11 @@ TokenList* split(char* str, char* filename){
             temp[l] = tolower(temp[l]);    
         }
         
+        //double check that the last element of a word is infact a character
+        if(!isalpha(temp[interval-1])){
+            temp[interval-1]='\0';
+        }
+
         //copy the lowercase string into the array
         strcpy(alphas[i], temp);
 
