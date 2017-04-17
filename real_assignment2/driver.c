@@ -65,7 +65,7 @@ FileData* sortFileData(FileData* head){
                 //ADD TO MIDDLE (FRONT OF FREQUENCY LIST)
                 else if(itr->next_fd!= NULL && 
                         itr->next_fd->token_count == ptr->token_count &&
-                        compare_str(ptr->filename, itr->next_fd->filename) > 0){
+                        compare_str(ptr->filename, itr->next_fd->filename) < 0){
                    
                     FileData* temp = itr->next_fd;
                     itr->next_fd = ptr;
@@ -77,23 +77,15 @@ FileData* sortFileData(FileData* head){
 
                 }
                 //add to end
-                else if(itr->next_fd== NULL &&
-                        itr->token_count > ptr->token_count){
+                else if(itr->next_fd== NULL){
                     itr->next_fd = ptr;
                     ptr = ptr->next_fd;
                     itr= itr->next_fd;
                     itr->next_fd = NULL;
                     break;
                 }
-                
-
             }
         }
-
-        //failsafe
-        ptr = ptr->next_fd;
-
-
     }
     
     return newHead;
@@ -110,21 +102,19 @@ int main(int argc, char** argv){
     FileData* five = createFileData("banana", "code", 5);
     FileData* six = createFileData("banana", "con", 5);
     FileData* seven = createFileData("banana", "coool", 5);
-    
-
 
     one->next_fd = two;
     two->next_fd = three;
+    three->next_fd = four;
+    four->next_fd = five;
+    five->next_fd = six;
+    six->next_fd = seven;
 
     printf("BEFORE:\n");
     FileData* itr;
     for(itr=one; itr!=NULL; itr=itr->next_fd){
         printf("%s %d\n", itr->filename, itr->token_count);
     }
-    //three->next_fd = four;
-    //four->next_fd = five;
-    //five->next_fd = six;
-    //six->next_fd = seven;
     
 
     printf("AFTER:\n");
@@ -133,9 +123,6 @@ int main(int argc, char** argv){
     for(itr= list; itr!=NULL; itr=itr->next_fd){
         printf("%s %d\n", itr->filename, itr->token_count);
     }
-
-  
-
 
     /*
     listdir("./test", 0);
