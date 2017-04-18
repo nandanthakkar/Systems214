@@ -413,8 +413,8 @@ void listdir(const char *name, int level){
 
 void writeToXML(){
     
-    printf("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-    printf("<fileIndex>\n"); 
+    fprintf(stdout,"<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+    fprintf(stdout, "<fileIndex>\n"); 
     
     //loop through alphabet
     int i = -1;
@@ -424,20 +424,20 @@ void writeToXML(){
         for(itr = token_table[i]; itr!=NULL; itr=itr->next){
             //loop through files in each token
             
-            printf("\t<word text=\"%s\">\n", itr->token); 
+            fprintf(stdout, "\t<word text=\"%s\">\n", itr->token); 
             
             FileData* ptr = NULL;
             int count=0;
              
             FileData* sorted = sortFileData(itr->head_fd);
             for(ptr=sorted; ptr!=NULL; ptr=ptr->next_fd, count++){
-                printf("\t\t<file name=\"%s\">%d</file>\n",ptr->filename, ptr->token_count);
+                fprintf(stdout, "\t\t<file name=\"%s\">%d</file>\n",ptr->filename, ptr->token_count);
             }
-            printf("\t</word>\n");
+            fprintf(stdout,"\t</word>\n");
         }
     }
 
-    printf("</fileIndex>");
+    fprintf(stdout,"</fileIndex>");
 }
 
 //sort the FileData linked list that is located within each token
