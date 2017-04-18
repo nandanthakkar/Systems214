@@ -60,7 +60,7 @@ int compare_str(char* a, char* b){
     bool same_prefix = true;
     int weight = 0;
     int i=-1;
-    for(i=0; i < LEN; i++){
+    for(i=0; i < LEN && same_prefix == true; i++){
 
         //if they are both numbers
         if(isdigit(a[i]) && isdigit(b[i])){
@@ -260,13 +260,24 @@ void addToken(char* token, char* filename){
         return;
     }
 
-    //if there are token is in the hastable, but the filename isn't
+    //if the new node being added is greater than the first node
+    else if(token_table[index]!=NULL && 
+            compare_str(token ,token_table[index]->token)<0){
+        
+        HashToken* temp = token_table[index];
+        token_table[index] = createHashToken(token, filename);
+        token_table[index]->next = temp;
+        return;
+    }
+
+    //if the token is in the hastable, but the filename isn't
     else{
         HashToken* ptr=NULL;
         
         //loop over the table to fin token
         for(ptr = token_table[index]; ptr!=NULL; ptr = ptr->next){
-            //if the token is in the list, add the file name is different
+            
+            //if the token is in the list, add the filename if different
             if(strcmp(ptr->token, token)==0){
                  
                 FileData* itr = NULL;
@@ -274,10 +285,10 @@ void addToken(char* token, char* filename){
                 //loop through the files
                 for(itr=ptr->head_fd; itr!=NULL; itr=itr->next_fd){
                     
-                    //append the the list using alphanumerics
+                    //append the list using alphanumerics
                     if(itr->next_fd != NULL &&
-                        compare_str(itr->filename, filename)>0 &&
-                        compare_str(itr->next_fd->filename, filename)<0){
+                        compare_str(filename, itr->filename)>0 &&
+                        compare_str(filename, itr->next_fd->filename)<0){
                         
                         //insert into the middle of the linked list
                         FileData* temp = itr->next_fd;
@@ -295,14 +306,33 @@ void addToken(char* token, char* filename){
                     }
                 }
             }             
+        
+            //if the token isn't in the list
+            //and we are in the middle of the list based on alphabetic
+            else if(ptr->next != NULL &&
+                    compare_str(token, ptr->token) > 0 &&
+                    compare_str(token, ptr->next->token)<0){
+                
+                //append to the middle 
+                HashToken* temp = ptr->next;
+                ptr->next = createHashToken(token, filename);
+                ptr->next->next = temp;
+
+                return;
+            }
+
+            //done check to see if new token belongs at the end,
+            //just kind of hoping that if all other conditions aren't met,
+            //we can just add it to the end
+            else if(ptr->next == NULL){
+
+                ptr->next = createHashToken(token, filename);
+                return;
+            }
         }
     }
 
-    //if we get here, the token isn't in the hashtable
-    //increment to the end of the hashtable and insert
-    HashToken* ptr=NULL;
-    for(ptr=token_table[index]; ptr->next!= NULL; ptr=ptr->next);
-    ptr->next = createHashToken(token, filename);
+   
     
 
 } 
@@ -324,7 +354,8 @@ void printTokenTable(){
             //loop through files in each token
             FileData* ptr = NULL;
             int count=0;
-            for(ptr=itr->head_fd; ptr!=NULL; ptr=ptr->next_fd, count++){
+            FileData* sorted = sortFileData(itr->head_fd);
+            for(ptr=sorted; ptr!=NULL; ptr=ptr->next_fd, count++){
                 printf("\t\t%d. Filename: %s\n\t\tTokenCount: %d\n",count, ptr->filename, ptr->token_count);
             }
         }
@@ -397,8 +428,9 @@ void writeToXML(){
             
             FileData* ptr = NULL;
             int count=0;
-            
-            for(ptr=itr->head_fd; ptr!=NULL; ptr=ptr->next_fd, count++){
+             
+            FileData* sorted = sortFileData(itr->head_fd);
+            for(ptr=sorted; ptr!=NULL; ptr=ptr->next_fd, count++){
                 printf("\t\t<file name=\"%s\">%d</file>\n",ptr->filename, ptr->token_count);
             }
             printf("\t</word>\n");
@@ -406,4 +438,93 @@ void writeToXML(){
     }
 
     printf("</fileIndex>");
+}
+
+//sort the FileData linked list that is located within each token
+FileData* sortFileData(FileData* head){
+        
+    FileData* newHead = NULL;
+
+    FileData* ptr = NULL;
+    for(ptr = head; ptr!= NULL; /*ptr=ptr->next_fd*/){
+        
+        //if the head is null, add the first element, and disconnect the ptr from the list
+        //ADD IF HEAD IS NULL
+        if(newHead == NULL){
+            newHead = ptr;
+            ptr = ptr->next_fd; 
+            newHead->next_fd = NULL;
+            continue;
+        }
+        
+        //if the token count of a word is greater than the current largest
+        //ADD TO FRONT
+        else if(newHead->token_count < ptr->token_count){
+            FileData* temp = newHead; //store a reference to newHead
+            newHead = ptr; //make newHead equal to the new larger ptr
+            ptr = ptr->next_fd;//make ptr move forward
+            newHead->next_fd = temp;// link back together the sorted list
+
+            continue;
+        }
+
+        else if(newHead->token_count == ptr->token_count && 
+                compare_str(ptr->filename, newHead->filename) < 0){
+                
+            FileData* temp = newHead; //store a reference to newHead
+            newHead = ptr; //make newHead equal to the new larger ptr
+            ptr = ptr->next_fd;//make ptr move forward
+            newHead->next_fd = temp;// link back together the sorted list
+
+            continue;
+        }
+        
+        //ADD TO CENTER & END
+        else{
+            FileData* itr = NULL;
+            for(itr = newHead; itr!=NULL; itr=itr->next_fd){
+                
+                //if the token frequency is greater than the head of the
+                //FREQUENCY MIDDLE
+                if(itr->next_fd != NULL &&
+                        itr->token_count > ptr->token_count &&
+                        ptr->token_count > itr->next_fd->token_count){
+                   
+                    FileData* temp = itr->next_fd;
+                    itr->next_fd = ptr;
+                    ptr = ptr->next_fd;
+                    itr->next_fd->next_fd= temp;
+                    itr = itr->next_fd->next_fd;
+
+                    break;
+                }
+                
+                //else if the token frequency is the same
+                //ADD TO MIDDLE (FRONT OF FREQUENCY LIST)
+                else if(itr->next_fd!= NULL && 
+                        itr->next_fd->token_count == ptr->token_count &&
+                        compare_str(ptr->filename, itr->next_fd->filename) < 0){
+                   
+                    FileData* temp = itr->next_fd;
+                    itr->next_fd = ptr;
+                    ptr = ptr->next_fd;
+                    itr->next_fd->next_fd= temp;
+                    itr = itr->next_fd->next_fd;
+
+                    break;   
+
+                }
+                //add to end
+                else if(itr->next_fd== NULL){
+                    itr->next_fd = ptr;
+                    ptr = ptr->next_fd;
+                    itr= itr->next_fd;
+                    itr->next_fd = NULL;
+                    break;
+                }
+            }
+        }
+    }
+    
+    return newHead;
 }
