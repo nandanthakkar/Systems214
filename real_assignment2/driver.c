@@ -36,7 +36,8 @@ void onStartUp(int argc, char** argv){
     //create reference to directory and directory entery
     DIR* dir;
     struct dirent* entry;
-   
+    TokenList* tokenList = NULL;
+
     //if the directory can't be read, try to open a file
     if(!(dir = opendir(directory))){
        
@@ -63,9 +64,6 @@ void onStartUp(int argc, char** argv){
                 for(; itr > 0; itr--)
                     if(((int)directory[itr]) - ((int)'/') == 0)
                         break;
-
-
-                TokenList* tokenList = NULL;
                 
                 //Call TokenList with the correct size
                 if(itr == 0)
@@ -88,6 +86,14 @@ void onStartUp(int argc, char** argv){
                
                 FILE* outputFile = fopen(input, "w+");
                 writeToXML(outputFile);
+
+                //delete the token list
+                for(i=0; i<tokenList->tok_amount; i++){
+                    free(tokenList->unsort_tokens[i]);
+                }
+                free(tokenList->filename);
+                free(tokenList);
+
             }
         }
         else{
@@ -109,14 +115,15 @@ void onStartUp(int argc, char** argv){
         FILE* outputFile = fopen(input, "w+");
         writeToXML(outputFile);
     }
+
 }
 
 //main method
 int main(int argc, char** argv){
     
     onStartUp(argc, argv);
+    destroyTable();    
     
-    //compare_str("this", "toast");
     return 0;
 
 }

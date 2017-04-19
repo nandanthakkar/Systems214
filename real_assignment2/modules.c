@@ -46,6 +46,40 @@ TokenList* createTokenList(int tok_amount, char** unsort_tokens, char* filename)
     return newTL;
 }
 
+void destroyTable(){
+   //loop through alphabet
+    int i = -1;
+    for(i=0; i<26; i++){
+        //loop through tokens in hashtable
+        HashToken* itr = NULL;
+        itr = token_table[i]; 
+        while(itr!=NULL){
+            
+            //loop through files in each token
+            FileData* ptr = itr->head_fd;
+            while(ptr!=NULL){
+                //point pointer to the dying node 
+                FileData* orphan = ptr;
+                //increment pointer
+                ptr=ptr->next_fd;
+
+                free(orphan->filename);
+                free(orphan->token);
+                free(orphan);
+            }
+
+            //create a reference to the soon to be dead node
+            HashToken* hashOrphan = itr;
+            //push the itr var forward to keep looping through
+            itr=itr->next;
+            
+            free(hashOrphan->token);
+//              free(hashOrphan->head_fd);
+            free(hashOrphan);
+        }
+    }
+}
+
 //evaluates which string is < or > than one another bases on alphanumerics
 int compare_str(char* a, char* b){
    
@@ -155,7 +189,6 @@ TokenList* split(char* str, char* filename){
             temp[j]='\0';
          
         sprintf(temp,"%.*s", interval, str + inter_tab[i][0]); //write the string to temp buffer
-        printf("%s\n", temp); //debug purposes
 
         //make all the characters in the string lowercase
         int l;
@@ -364,6 +397,8 @@ void printTokenTable(){
     }
 }
 
+
+
 void listdir(const char *name, int level){
     DIR *dir;
     struct dirent *entry;
@@ -407,6 +442,15 @@ void listdir(const char *name, int level){
                 char* token = tokenList->unsort_tokens[i];
                 addToken(token, filename);        
             }
+
+                //delete the token list
+                for(i=0; i<tokenList->tok_amount; i++){
+                    free(tokenList->unsort_tokens[i]);
+                }
+                free(tokenList->filename);
+                free(tokenList);
+
+
             //printf("%*s- %s\n", level*2, "", entry->d_name);//prints for testing purposes
         }
     } while(entry = readdir(dir));

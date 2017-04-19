@@ -51,3 +51,4 @@ void printTokenTable();
 void listdir(const char *name, int level);
 void writeToXML();
 FileData* sortFileData(FileData* head);
+void destroyTable();
