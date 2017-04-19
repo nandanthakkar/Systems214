@@ -1,57 +1,54 @@
-#ifndef HEADER
-#define HEADER
-
-#include <string.h>
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <dirent.h>
 
-#endif
+//boolean type
+typedef enum bool{false, true}bool;
 
-//GLOBAL BOOL TYPE
-typedef enum _bool{false, true} bool;
+//stores filename, the token, and the token count
+typedef struct _filedata{
+    char* filename;
+    char* token;
+    int token_count;
+    struct _filedata* next_fd; 
+}FileData;
 
-//Used right after splitting data from a file
+//keeps track of token, File Data linked list, and refernce to next token in token table
+typedef struct _hashtoken{
+    char* token;
+    FileData* head_fd; 
+    struct _hashtoken* next;
+}HashToken;
+
+
+//TODO: Rename to FileTokens
 typedef struct _TokenList{
-    char** unsort_tokens;
     int tok_amount;
+    char** unsort_tokens;
+    char* filename;
 }TokenList;
 
-//Used as a data type to store the token count within files
-typedef struct _token_node{
-    char* token;
-    int token_frequency;
-    char* filename;
-    struct _token_node* next;
-}TokenNode;
+//token hashtable
+HashToken* token_table[26];
 
-typedef struct _FileHash{
-    char* filename;         //name of file
-    TokenList* tokens;
-    struct _FileHash* next; //next file that starts with the same character
-} FileHash;
+// create functions
+HashToken* createHashToken(char* token, char* filename);
+FileData* createFileData(char* token, char* filename, int token_count);
+TokenList* createTokenList(int tok_amount, char** unsort_tokens, char* filename);
 
-//Used for creating a Keyset in file_hashtable.c
-typedef struct _filename{
-    char* filename;
-    struct _filename* next; 
-}FileName;
-
-//generates a hash position in my hash table
-int hash_id(char c);
-
-//function that compares if a string is larger based on the alphanumeric value
+//helper functions
 int compare_str(char* a, char* b);
-
-//function that sorts Tokens from a TokenData* based on the alphanumeric compare function
-TokenNode* sort(TokenList* data, int SIZE, char* filename);
-
-//merges the tokens from a file when they share the same name
-TokenList* merge_data(TokenList* a, TokenList* b);
-
-
-//Set of functions used to create each struct type
-TokenNode* create_token_node(char* token, int token_freq, char* filename);
-FileName* create_keyset_elem(char* filename);
-FileHash* create_filehash(char* filename, TokenList* token_list);
-TokenList* create_token_data(char** unsort_tokens, int tok_amount);
+TokenList* split(char* str, char* filename);
+unsigned long long int fsize(char* filepath);
+char* readfile(char* filepath);
+int hashId(char c);
+void addToken(char* token, char* filename);
+void printTokenTable();
+void listdir(const char *name, int level);
+void writeToXML();
+FileData* sortFileData(FileData* head);
+void destroyTable();
