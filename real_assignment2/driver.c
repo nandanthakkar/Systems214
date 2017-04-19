@@ -53,9 +53,29 @@ void onStartUp(int argc, char** argv){
             else{
                 //read and get it as a string
                 char* fileTokens = readfile(directory);
+                
+                //get size of directory name
+                int actualSize;
+                for(actualSize = 0; directory[actualSize] != '\0'; actualSize++);
 
-                //get all the tokens as a list and store the filename
-                TokenList* tokenList = split(fileTokens, entry->d_name);
+                //get the name of the directory entry from the file to the end of the word.
+                int itr = actualSize-1;
+                for(; itr > 0; itr--)
+                    if(((int)directory[itr]) - ((int)'/') == 0)
+                        break;
+
+
+                TokenList* tokenList = NULL;
+                
+                //Call TokenList with the correct size
+                if(itr == 0)
+                    tokenList = split(fileTokens, directory);
+                else{
+                    char* realFilename = (char*)malloc((sizeof(char)*(actualSize-itr)));
+                    strncpy(realFilename,(char*) &directory[itr+1], actualSize-itr);
+                    realFilename[actualSize-itr-1] = '\0'; 
+                    tokenList = split(fileTokens, realFilename);
+                }
 
                 int amount = tokenList->tok_amount;
                 char* filename = tokenList->filename;

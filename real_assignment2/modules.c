@@ -1,9 +1,12 @@
 #include "modules.h"
 
 HashToken* createHashToken(char* token, char* filename){
+
     HashToken* HT = (HashToken*) malloc(sizeof(HashToken));
 
-    HT->token = (char*)malloc((sizeof(char)*strlen(token) + 1));
+    //HT->token = (char*)malloc((sizeof(char)*strlen(token) + 1));
+    HT->token = (char*)malloc((sizeof(char)*strlen(token)));
+    
     strcpy(HT->token, token);
 
     HT->head_fd = createFileData(token, filename, 1);
@@ -19,7 +22,9 @@ FileData* createFileData(char* token, char* filename, int token_count){
     FD->token = (char*)malloc((sizeof(char) * strlen(token)+1));
     strcpy(FD->token, token);
 
-    FD->filename = (char*)malloc( (sizeof(char) * strlen(filename)+1));
+    // FD->filename = (char*)malloc( (sizeof(char) * strlen(filename)+1));
+    FD->filename = (char*)malloc( (sizeof(char) * strlen(filename)));
+    
     strcpy(FD->filename, filename);
 
     FD->token_count = token_count;
@@ -34,7 +39,8 @@ TokenList* createTokenList(int tok_amount, char** unsort_tokens, char* filename)
     newTL->tok_amount = tok_amount;
     newTL->unsort_tokens = unsort_tokens;
     
-    newTL->filename = (char*)malloc((sizeof(char)*strlen(filename) + 1));
+    //newTL->filename = (char*)malloc((sizeof(char)*strlen(filename) + 1));
+    newTL->filename = (char*)malloc((sizeof(char)*strlen(filename)));
     strcpy(newTL->filename, filename);
 
     return newTL;
@@ -119,7 +125,7 @@ TokenList* split(char* str, char* filename){
             inter_tab[word_count][0] = i;   // mark current pos in the string as word start
         }
  
-        else if(inword && str[i+1] == '\n' || inword && str[i+1] == '\0'){
+        else if(inword && str[i+1] == '\0'){
             inter_tab[word_count][1] = i+1;   // mark the closing char-pos to the word
             word_count++;                   // increase the word count by 1
             inword = false;                 // mark that we are no longer in a word
@@ -147,9 +153,10 @@ TokenList* split(char* str, char* filename){
         int j;
         for(j=0; j< interval+1; j++)
             temp[j]='\0';
-        
+         
         sprintf(temp,"%.*s", interval, str + inter_tab[i][0]); //write the string to temp buffer
-        
+        printf("%s\n", temp); //debug purposes
+
         //make all the characters in the string lowercase
         int l;
         for(l=0; l<strlen(temp); l++){
@@ -191,7 +198,7 @@ char* readfile(char* filepath){
     
     //check to see if file pointer is null, if so end program
     if(fp == NULL){
-        perror("void read_file(char* filepath):\n couldn't read file read_file\n NULL file pointer");
+        printf("void read_file(char* filepath):\n couldn't read file read_file\n NULL file pointer");
         exit(EXIT_FAILURE);
     }
     
@@ -216,7 +223,7 @@ int hashId(char c){
     if(isalpha(c))    
         return (int)(c-'a');
     
-    perror("The file being inserted doesn't start with a letter");
+    printf("The file being inserted doesn't start with a letter");
     exit(EXIT_FAILURE);
 }
 
@@ -224,11 +231,11 @@ int hashId(char c){
 void addToken(char* token, char* filename){
     
     if(token == NULL){
-        perror("ERROR - addToken: token is NULL");
+        printf("ERROR - addToken: token is NULL");
         exit(EXIT_FAILURE);
     }
     else if(filename == NULL){
-        perror("ERROR - addToken: filename is NULL");
+        printf("ERROR - addToken: filename is NULL");
         exit(EXIT_FAILURE);
     }
 
@@ -330,10 +337,6 @@ void addToken(char* token, char* filename){
             }
         }
     }
-
-   
-    
-
 } 
 
 //goes through all the tokens in the token table and prints out the data
