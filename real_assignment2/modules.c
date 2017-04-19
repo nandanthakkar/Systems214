@@ -221,7 +221,6 @@ int hashId(char c){
 }
 
 //hash table where all tokens will be stored
-
 void addToken(char* token, char* filename){
     
     if(token == NULL){
@@ -411,10 +410,10 @@ void listdir(const char *name, int level){
     closedir(dir);
 }
 
-void writeToXML(){
+void writeToXML(FILE* fp){
     
-    fprintf(stdout,"<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-    fprintf(stdout, "<fileIndex>\n"); 
+    fprintf(fp,"<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+    fprintf(fp,"<fileIndex>\n"); 
     
     //loop through alphabet
     int i = -1;
@@ -424,20 +423,19 @@ void writeToXML(){
         for(itr = token_table[i]; itr!=NULL; itr=itr->next){
             //loop through files in each token
             
-            fprintf(stdout, "\t<word text=\"%s\">\n", itr->token); 
-            
+            fprintf(fp, "\t<word text=\"%s\">\n", itr->token); 
             FileData* ptr = NULL;
             int count=0;
              
             FileData* sorted = sortFileData(itr->head_fd);
             for(ptr=sorted; ptr!=NULL; ptr=ptr->next_fd, count++){
-                fprintf(stdout, "\t\t<file name=\"%s\">%d</file>\n",ptr->filename, ptr->token_count);
+                fprintf(fp, "\t\t<file name=\"%s\">%d</file>\n",ptr->filename, ptr->token_count);
             }
-            fprintf(stdout,"\t</word>\n");
+            fprintf(fp,"\t</word>\n");
         }
     }
 
-    fprintf(stdout,"</fileIndex>");
+    fprintf(fp,"</fileIndex>");
 }
 
 //sort the FileData linked list that is located within each token

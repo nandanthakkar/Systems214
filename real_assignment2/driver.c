@@ -8,7 +8,7 @@ void onStartUp(int argc, char** argv){
     const int SIZE = 1024;
     char input[SIZE];
     char directory[SIZE];
-
+    
     //if the porper amount of arguments were inserted, clear the buffer, else exit
     if(argc == 3){
         strcpy(input, argv[1]);
@@ -18,7 +18,6 @@ void onStartUp(int argc, char** argv){
         printf("ERROR: argument count is wrong.\nToo many or too little arguments\n");
         exit(EXIT_FAILURE);
     }
-     
     
     //check to see if the file exists
     if(access(input, F_OK)==0){
@@ -37,41 +36,59 @@ void onStartUp(int argc, char** argv){
     //create reference to directory and directory entery
     DIR* dir;
     struct dirent* entry;
-
-    if(!(dir = opendir("./"))){
+   
+    //if the directory can't be read, try to open a file
+    if(!(dir = opendir(directory))){
        
+        //if the error recorded is "Error Not Directory", then check to see if 
+        //module to be read is a file
         if(errno == ENOTDIR){
+            FILE* fp = fopen(directory, "r");
             
-            
+            //if file is null, leave
+            if(!fp){
+                printf("ERROR: Couldn't open the file, file doesn't exist.\n");
+            }
+            //otherwiese the file exists
+            else{
+                //read and get it as a string
+                char* fileTokens = readfile(directory);
 
+                //get all the tokens as a list and store the filename
+                TokenList* tokenList = split(fileTokens, entry->d_name);
+
+                int amount = tokenList->tok_amount;
+                char* filename = tokenList->filename;
+
+                int i;
+                for(i=0; i<amount; i++){
+                    char* token = tokenList->unsort_tokens[i];
+                    addToken(token, filename);        
+                }
+               
+                FILE* outputFile = fopen(input, "w+");
+                writeToXML(outputFile);
+            }
         }
         else{
-            perror("ERROR: Couldn't open directory, directory doesn't exist.\n");
+            printf("ERROR: Couldn't open directory or file, doesn't exist.\n");
             exit(EXIT_FAILURE);
         }
-     }
-
-
-    if(!(entry = readdir(dir))){
-        perror("ERROR: Couldn't read directory.\n");
-        exit(EXIT_FAILURE);
+    }
+    //if the directory does exist, read the directory
+    else{
+        //if it didn't throw an error, check to see if the directory could be read 
+        if(!(entry = readdir(dir))){
+            printf("ERROR: Couldn't read directory.\n");
+            exit(EXIT_FAILURE);
+        }
         
+        //if the directory was able to be read, read dir
+        listdir(directory,0);
+
+        FILE* outputFile = fopen(input, "w+");
+        writeToXML(outputFile);
     }
-    
-    do{
-        //check to see if the entry is a directory
-        if(entry->d_type == DT_DIR){
-            printf("input is directory");
-        }
-        //check to see if the entry is a regular file
-        else if(entry->d_type == DT_REG){
-            printf("input is a reg file");
-        }
-    
-    }
-    while(entry = readdir(dir));
-    perror("ERROR: Counldn't read input as file or directory.\n");
-    exit(EXIT_FAILURE);
 }
 
 //main method
