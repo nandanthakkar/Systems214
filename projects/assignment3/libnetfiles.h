@@ -30,4 +30,4 @@ typedef enum _bool{false=0, true=1} bool;
 ssize_t netwrite(int fileDescriptor, const void* buffer, size_t nByte);
 
 //reads to server
-ssize_t netread(int fileDescriptor, void* buffer, size_t nByte){
+ssize_t netread(int fileDescriptor, void* buffer, size_t nByte);
